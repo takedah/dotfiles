@@ -27,8 +27,8 @@ if has('vim_starting')
   call neobundle#end()
 endif
 
-NeoBundle 'Shugo/neocomplcache'
-NeoBundle 'Shugo/unite.vim'
+NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'Shougo/unite.vim'
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'thinca/vim-ref'
 
