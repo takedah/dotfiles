@@ -1,5 +1,3 @@
-" viと互換しない。
-set nocompatible
 " 一旦ファイルタイプの設定を無効化。
 filetype off
 " カラースキーム。
@@ -22,16 +20,26 @@ set noswapfile
 
 " 以下neobundleの設定。
 if has('vim_starting')
+  if &compatible
+    set nocompatible " Be iMproved
+  endif
   set runtimepath+=~/.vim/bundle/neobundle.vim
-  call neobundle#begin(expand('~/.vim/bundle/'))
-  call neobundle#end()
 endif
+call neobundle#begin(expand('~/.vim/bundle/'))
 
+" Let NeoBundle manage NeoBundle
+" Required:
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+" My Bundles here:
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'thinca/vim-ref'
 
+call neobundle#end()
+
+" Required:
 filetype plugin indent on
-filetype indent on
-syntax on
+
+NeoBundleCheck
