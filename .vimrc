@@ -1,7 +1,5 @@
 " 一旦ファイルタイプの設定を無効化。
 filetype off
-" カラースキーム。
-colorscheme desert
 " 行ナンバーを表示する。
 set number
 " 文字コード・改行コードを指定する。
@@ -17,6 +15,9 @@ set expandtab
 set tabstop=2
 " スワップファイルを作らない。
 set noswapfile
+" ステータスラインに情報を表示。
+set laststatus=2
+set statusline=%F%m%r%h%w\[TYPE=%Y]\[FORMAT=%{&ff}]\[ENC=%{&fenc}]\[ROW=%l]\[COL=%v][%p%%]
 
 " 以下neobundleの設定。
 if has('vim_starting')
@@ -36,6 +37,7 @@ NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'thinca/vim-ref'
+NeoBundle 'w0ng/vim-hybrid'
 
 call neobundle#end()
 
@@ -43,3 +45,7 @@ call neobundle#end()
 filetype plugin indent on
 
 NeoBundleCheck
+
+" カラースキーム。
+colorscheme hybrid
+highlight Normal ctermbg=none
