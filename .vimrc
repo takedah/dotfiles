@@ -1,5 +1,7 @@
 " 一旦ファイルタイプの設定を無効化。
 filetype off
+" syntax
+syntax on
 " 行ナンバーを表示する。
 set number
 " 文字コード・改行コードを指定する。
