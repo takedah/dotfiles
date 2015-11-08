@@ -49,5 +49,7 @@ filetype plugin indent on
 NeoBundleCheck
 
 " カラースキーム。
+set background=dark
+set term=screen-256color
 colorscheme hybrid
 highlight Normal ctermbg=none
