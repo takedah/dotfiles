@@ -40,6 +40,7 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'thinca/vim-ref'
 NeoBundle 'w0ng/vim-hybrid'
+NeoBundle 'othree/html5.vim'
 
 call neobundle#end()
 
@@ -53,3 +54,9 @@ set background=dark
 set term=screen-256color
 colorscheme hybrid
 highlight Normal ctermbg=none
+
+" erbファイルのインデント有効化。
+let g:html5_event_handler_attributes_complete = 1
+let g:html5_rdfa_attributes_complete = 1
+let g:html5_microdata_attributes_complete = 1
+let g:html5_aria_attributes_complete = 1
