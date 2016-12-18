@@ -12,6 +12,6 @@ fi
 alias ll='ls -al'
 alias vi='vim'
 export TERM=xterm-256color
-export PATH="/usr/local/packer/:$PATH"
+export PATH="/usr/local/packer:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
