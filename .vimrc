@@ -10,6 +10,8 @@ set fileencodings=utf-8,iso-2022-jp,sjis,euc-jp
 set fileformats=unix,dos
 " backspaceキーで文字削除を有効にする。
 set backspace=indent,eol,start
+" 開いているファイルにカレントディレクトリを移動する。
+set autochdir
 " オートインデントを設定。
 set autoindent
 set shiftwidth=2
