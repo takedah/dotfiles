@@ -23,42 +23,58 @@ set noswapfile
 set laststatus=2
 set statusline=%F%m%r%h%w\[TYPE=%Y]\[FORMAT=%{&ff}]\[ENC=%{&fenc}]\[ROW=%l]\[COL=%v][%p%%]
 
-" 以下neobundleの設定。
-if has('vim_starting')
-  if &compatible
-    set nocompatible " Be iMproved
-  endif
-  set runtimepath+=~/.vim/bundle/neobundle.vim
+" erbファイルのインデント有効化。
+let g:html5_event_handler_attributes_complete = 1
+let g:html5_rdfa_attributes_complete = 1
+let g:html5_microdata_attributes_complete = 1
+let g:html5_aria_attributes_complete = 1
+
+"dein Scripts-----------------------------
+if &compatible
+  set nocompatible               " Be iMproved
 endif
-call neobundle#begin(expand('~/.vim/bundle/'))
 
-" Let NeoBundle manage NeoBundle
 " Required:
-NeoBundleFetch 'Shougo/neobundle.vim'
+set runtimepath+=/home/hiroki/.vim/bundles/repos/github.com/Shougo/dein.vim
 
-" My Bundles here:
-NeoBundle 'Shougo/neocomplcache'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'vim-ruby/vim-ruby'
-NeoBundle 'thinca/vim-ref'
-NeoBundle 'w0ng/vim-hybrid'
-NeoBundle 'othree/html5.vim'
+" Required:
+if dein#load_state('/home/hiroki/.vim/bundles')
+  call dein#begin('/home/hiroki/.vim/bundles')
 
-call neobundle#end()
+  " Let dein manage dein
+  " Required:
+  call dein#add('/home/hiroki/.vim/bundles/repos/github.com/Shougo/dein.vim')
+
+  " Add or remove your plugins here:
+  call dein#add('Shougo/neosnippet.vim')
+  call dein#add('Shougo/neosnippet-snippets')
+  call dein#add('Shougo/neocomplete.vim')
+  call dein#add('vim-ruby/vim-ruby')
+  call dein#add('thinca/vim-ref')
+  call dein#add('w0ng/vim-hybrid')
+  call dein#add('othree/html5.vim')
+
+  " You can specify revision/branch/tag.
+  call dein#add('Shougo/vimshell', { 'rev': '3787e5' })
+
+  " Required:
+  call dein#end()
+  call dein#save_state()
+endif
 
 " Required:
 filetype plugin indent on
+syntax enable
 
-NeoBundleCheck
+"If you want to install not installed plugins on startup.
+if dein#check_install()
+  call dein#install()
+endif
+
+"End dein Scripts-------------------------
 
 " カラースキーム。
 set background=dark
 set term=screen-256color
 colorscheme hybrid
 highlight Normal ctermbg=none
-
-" erbファイルのインデント有効化。
-let g:html5_event_handler_attributes_complete = 1
-let g:html5_rdfa_attributes_complete = 1
-let g:html5_microdata_attributes_complete = 1
-let g:html5_aria_attributes_complete = 1
