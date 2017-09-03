@@ -1,7 +1,3 @@
-" 一旦ファイルタイプの設定を無効化。
-filetype off
-" syntax
-syntax on
 " 行ナンバーを表示する。
 set number
 " 文字コード・改行コードを指定する。
@@ -35,15 +31,15 @@ if &compatible
 endif
 
 " Required:
-set runtimepath+=/home/hiroki/.vim/bundles/repos/github.com/Shougo/dein.vim
+set runtimepath+=~/.vim/bundles/repos/github.com/Shougo/dein.vim
 
 " Required:
-if dein#load_state('/home/hiroki/.vim/bundles')
-  call dein#begin('/home/hiroki/.vim/bundles')
+if dein#load_state('~/.vim/bundles')
+  call dein#begin('~/.vim/bundles')
 
   " Let dein manage dein
   " Required:
-  call dein#add('/home/hiroki/.vim/bundles/repos/github.com/Shougo/dein.vim')
+  call dein#add('~/.vim/bundles/repos/github.com/Shougo/dein.vim')
 
   " Add or remove your plugins here:
   call dein#add('Shougo/neosnippet.vim')

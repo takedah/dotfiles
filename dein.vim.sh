@@ -1,2 +1,3 @@
 #!/bin/bash
-curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > install-dein.vim.sh
+mkdir -p ~/.vim/bundles/repos/github.com/Shougo/dein.vim
+git clone https://github.com/Shougo/dein.vim.git ~/.vim/bundles/repos/github.com/Shoungo/dein.vim
