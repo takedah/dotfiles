@@ -9,8 +9,6 @@ if [ -d "$HOME/bin" ] ; then
 fi
 
 # User Define PATH
-alias ll='ls -al'
-alias vi='vim'
 export TERM=xterm-256color
 export PATH="/usr/local/packer:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
