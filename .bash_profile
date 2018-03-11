@@ -10,6 +10,7 @@ fi
 
 # User Define PATH
 export TERM=xterm-256color
-export PATH="/usr/local/packer:$PATH"
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
