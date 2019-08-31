@@ -3,6 +3,11 @@ if [ -f "$HOME/.bashrc" ]; then
   . "$HOME/.bashrc"
 fi
 
+# include .bashrc if it exists
+if [ -f "$HOME/.bash_aliases" ]; then
+  . "$HOME/.bash_aliases"
+fi
+
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
   PATH="$HOME/bin:$PATH"
