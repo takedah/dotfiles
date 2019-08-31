@@ -1,3 +1,3 @@
 #!/bin/bash
-mkdir -p ~/.vim/bundles/repos/github.com/Shougo/dein.vim
-git clone https://github.com/Shougo/dein.vim.git ~/.vim/bundles/repos/github.com/Shougo/dein.vim
+curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
+sh ./installer.sh
