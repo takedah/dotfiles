@@ -19,3 +19,6 @@ export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
+
+# Disable middle click for Thinkpad
+xinput set-button-map "TPPS/2 Elan TrackPoint" 1 0 3 4 5 6 7
