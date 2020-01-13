@@ -53,6 +53,7 @@ if dein#load_state('~/.vim/bundles')
   call dein#add('davidhalter/jedi-vim')
   call dein#add('thinca/vim-ref')
   call dein#add('w0ng/vim-hybrid')
+  call dein#add('nanotech/jellybeans')
   call dein#add('othree/html5.vim')
 
   " You can specify revision/branch/tag.
