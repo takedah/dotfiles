@@ -106,7 +106,7 @@ let g:neocomplete#force_omni_input_patterns.ruby = '[^.*\t]\.\w*\|\h\w*::'
 " カラースキーム。
 set background=dark
 set term=screen-256color
-colorscheme hybrid
+colorscheme jellybeans
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
 highlight SpecialKey ctermbg=none
