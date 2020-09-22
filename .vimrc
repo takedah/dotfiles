@@ -137,13 +137,13 @@ let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 " For jedi-vim setting.
 " https://dackdive.hateblo.jp/entry/2014/08/13/130000
-autocmd FileType python setlocal omnifunc=jedi#complications
+autocmd FileType python setlocal omnifunc=jedi#completions
 let g:jedi#complications_enabled = 0
 let g:jedi#auto_vim_cofiguration = 0
 if !exists('g:neocomplete#force_omni_input_patterns')
     let g:neocomplete#force_omni_input_patterns = {}
 endif
-let g:neocomplete#force_omni_input_patterns.python = '\h\w*\|[^. \t]\.\w*'
+let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 autocmd FileType python setlocal completeopt-=preview
 " End neocomplete Settings----------------
 
