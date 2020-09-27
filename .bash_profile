@@ -20,5 +20,8 @@ eval "$(pyenv init -)"
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
+# show git branch name
+PS1='\[\033[1;32m\]\u@\h\[\033[00m\]:\[\033[1;34m\]\w\[\033[00m\]\[\033[1;31m\]$(__git_ps1)\[\033[00m\]\$ '
+
 # Disable middle click for Thinkpad
 xinput set-button-map "TPPS/2 Elan TrackPoint" 1 0 3 4 5 6 7
