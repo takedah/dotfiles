@@ -35,6 +35,8 @@ if dein#load_state('~/.vim/bundles')
   call dein#add('scrooloose/nerdtree')
   call dein#add('Shougo/neomru.vim')
   call dein#add('Shougo/neocomplete.vim')
+  call dein#add('Shougo/neosnippet.vim')
+  call dein#add('Shougo/neosnippet-snippets')
   call dein#add('nathanaelkane/vim-indent-guides')
   call dein#add('bronson/vim-trailing-whitespace')
   call dein#add('tpope/vim-surround')
@@ -146,6 +148,27 @@ endif
 let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
 autocmd FileType python setlocal completeopt-=preview
 " End neocomplete Settings----------------
+
+" neosnippets Settings--------------------
+" Plugin key-mappings.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+"imap <expr><TAB>
+" \ pumvisible() ? "\<C-n>" :
+" \ neosnippet#expandable_or_jumpable() ?
+" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
+endif
 
 " indent-guides Settings------------------
 let g:indent_guides_enable_on_vim_startup = 1
