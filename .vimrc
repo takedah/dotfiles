@@ -10,6 +10,7 @@ set expandtab
 set shiftwidth=4
 set tabstop=4
 set shiftround
+set iskeyword-=_
 nnoremap j gj
 nnoremap k gk
 
@@ -169,6 +170,7 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 if has('conceal')
   set conceallevel=2 concealcursor=niv
 endif
+" End neosnippets Settings----------------
 
 " indent-guides Settings------------------
 let g:indent_guides_enable_on_vim_startup = 1

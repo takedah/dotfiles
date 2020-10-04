@@ -1,3 +1,3 @@
 alias ll='ls -al'
-alias vi='vim'
+alias vi='nvim'
 alias sudo='sudo -E '
