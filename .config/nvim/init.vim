@@ -100,6 +100,7 @@ call deoplete#custom#option('omni_patterns', {
         \ 'xml': ['<', '</', '<[^>]*\s[[:alnum:]-]*'],
         \})
 let g:python3_host_prog = '~/.pyenv/shims/python'
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " neosnippet
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
