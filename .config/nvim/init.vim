@@ -44,6 +44,9 @@ if dein#load_state('~/.cache/dein')
   call dein#add('scrooloose/syntastic')
   call dein#add('othree/html5.vim')
   call dein#add('nathanaelkane/vim-indent-guides')
+  call dein#add('yuezk/vim-js')
+  call dein#add('maxmellon/vim-jsx-pretty')
+  call dein#add('carlitux/deoplete-ternjs', { 'build': 'npm install -g tern' })
 
   call dein#end()
   call dein#save_state()
@@ -57,6 +60,10 @@ if dein#check_install()
   call dein#install()
 endif
 "End dein Settings------------------------
+
+" For deoplete-ternjs setting.
+" https://github.com/carlitux/deoplete-ternjs/issues/88
+call deoplete#custom#option('num_processes', 4)
 
 " denite
 autocmd FileType denite call s:denite_my_settings()
