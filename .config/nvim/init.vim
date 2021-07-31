@@ -45,6 +45,9 @@ if dein#load_state('~/.cache/dein')
   call dein#add('othree/html5.vim')
   call dein#add('nathanaelkane/vim-indent-guides')
   call dein#add('vim-airline/vim-airline')
+  call dein#add('jiangmiao/auto-pairs')
+  call dein#add('editorconfig/editorconfig-vim')
+  call dein#add('vim-python/python-syntax')
   call dein#add('yuezk/vim-js')
   call dein#add('maxmellon/vim-jsx-pretty')
   call dein#add('carlitux/deoplete-ternjs', { 'build': 'npm install -g tern' })
@@ -126,9 +129,17 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers = ["flake8"]
+let g:syntastic_javascript_checkers = ["eslint"]
 
 " vim-indent-guides
 let g:indent_guides_enable_on_vim_startup = 1
+
+" vim-easy-align
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+
+" python-syntax
+let g:python_highlight_all = 1
 
 " Appearance Settings---------------------
 set hlsearch
