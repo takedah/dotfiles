@@ -11,8 +11,14 @@ set shiftwidth=4
 set tabstop=4
 set shiftround
 set iskeyword-=_
+set autoread
 nnoremap j gj
 nnoremap k gk
+
+augroup vimrc-checktime
+    autocmd!
+    autocmd WinEnter * checktime
+augroup END
 
 "dein Settings----------------------------
 if &compatible
