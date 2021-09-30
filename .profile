@@ -13,6 +13,9 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
 
+# poety
+export PATH="$HOME/.poetry/bin:$PATH"
+
 # nodejs
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
@@ -42,3 +45,4 @@ export XDG_DATA_HOME="$HOME/.local/share"
 
 # Disable middle click for Thinkpad
 xinput set-button-map "TPPS/2 Elan TrackPoint" 1 0 3 4 5 6 7
+
