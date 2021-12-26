@@ -15,12 +15,13 @@ set autoread
 set hlsearch
 set list
 set laststatus=2
-set termguicolors
 set hidden
 set nobackup
 set nowritebackup
 set cmdheight=2
 set updatetime=300
+set shortmess+=c
+set signcolumn=number
 filetype plugin indent on
 nnoremap j gj
 nnoremap k gk
@@ -177,9 +178,17 @@ let g:fern#default_hidden=1
 nnoremap <silent> <Leader>e :<C-u>Fern . -drawer<CR>
 nnoremap <silent> <Leader>E :<C-u>Fern . -drawer -reveal=%<CR>
 
+" gruvbox-material
+let g:gruvbox_material_transparent_background = 1
+
+" appearance settings
 syntax enable
+set termguicolors
+set background=dark
 colorscheme gruvbox-material
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
 highlight SpecialKey ctermbg=none
+highlight LineNr ctermbg=none guibg=none
+highlight Folded ctermbg=none guibg=none
 highlight EndOfBuffer ctermbg=none
