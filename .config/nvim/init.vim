@@ -15,6 +15,7 @@ set autoread
 set hlsearch
 set list
 set laststatus=2
+set showtabline=2
 set hidden
 set nobackup
 set nowritebackup
@@ -40,6 +41,7 @@ Plug 'yuki-yano/fzf-preview.vim', { 'branch': 'release/remote', 'do': ':UpdateRe
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'lambdalisue/fern.vim'
 Plug 'lambdalisue/gina.vim'
+Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'jiangmiao/auto-pairs'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -177,6 +179,19 @@ nnoremap <silent> [ff]o  :<C-u>CocCommand fzf-preview.CocOutline --add-fzf-arg=-
 let g:fern#default_hidden=1
 nnoremap <silent> <Leader>e :<C-u>Fern . -drawer<CR>
 nnoremap <silent> <Leader>E :<C-u>Fern . -drawer -reveal=%<CR>
+
+" treesitter
+lua <<EOF
+require('nvim-treesitter.configs').setup {
+  ensure_installed = "maintained",
+  highlight = {
+    enable = true,
+  },
+}
+EOF
+
+" vim-airline
+let g:airline#extensions#tabline#enabled = 1
 
 " gruvbox-material
 let g:gruvbox_material_transparent_background = 1
