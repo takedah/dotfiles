@@ -19,7 +19,7 @@ export PATH="$RBENV_ROOT/bin:$PATH"
 eval "$(rbenv init -)"
 
 # poety
-export PATH="$HOME/.poetry/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 # nodejs
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
