@@ -51,13 +51,17 @@ call plug#end()
 let g:mapleader = "\<Space>"
 nnoremap <Leader> <Nop>
 xnoremap <Leader> <Nop>
+nnoremap [dev]    <Nop>
+xnoremap [dev]    <Nop>
+nmap     m        [dev]
+xmap     m        [dev]
 nnoremap [ff]     <Nop>
 xnoremap [ff]     <Nop>
 nmap     z        [ff]
 xmap     z        [ff]
 
 "" coc.nvim
-let g:coc_global_extensions = ['coc-jedi', 'coc-json', 'coc-yaml']
+let g:coc_global_extensions = ['coc-jedi', 'coc-json', 'coc-yaml', 'coc-tsserver', 'coc-eslint8', 'coc-prettier']
 
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
@@ -95,6 +99,9 @@ nmap <silent> gr <Plug>(coc-references)
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
+nmap     <silent> [dev]rn <Plug>(coc-rename)
+nmap     <silent> [dev]a  <Plug>(coc-codeaction-selected)iw
+
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
@@ -108,9 +115,6 @@ endfunction
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Symbol renaming.
-nmap <Leader>rn <Plug>(coc-rename)
-
 " Formatting selected code.
 xmap <Leader>f  <Plug>(coc-format-selected)
 nmap <Leader>f  <Plug>(coc-format-selected)
@@ -123,10 +127,14 @@ augroup mygroup
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
-" Applying codeAction to the selected region.
-" Example: `<Leader>aap` for current paragraph
-xmap <Leader>a  <Plug>(coc-codeaction-selected)
-nmap <Leader>a  <Plug>(coc-codeaction-selected)
+function! s:coc_typescript_settings() abort
+  nnoremap <silent> <buffer> [dev]f :<C-u>CocCommand eslint.executeAutofix<CR>:CocCommand prettier.formatFile<CR>
+endfunction
+
+augroup coc_ts
+  autocmd!
+  autocmd FileType typescript,typescriptreact call <SID>coc_typescript_settings()
+augroup END
 
 " Remap keys for applying codeAction to the current buffer.
 nmap <Leader>ac  <Plug>(coc-codeaction)
