@@ -61,7 +61,7 @@ nmap     z        [ff]
 xmap     z        [ff]
 
 "" coc.nvim
-let g:coc_global_extensions = ['coc-jedi', 'coc-json', 'coc-yaml', 'coc-tsserver', 'coc-eslint8', 'coc-prettier']
+let g:coc_global_extensions = ['coc-jedi', 'coc-json', 'coc-yaml', 'coc-tsserver', 'coc-eslint8', 'coc-prettier', 'coc-sql', 'coc-html', 'coc-sh']
 
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
