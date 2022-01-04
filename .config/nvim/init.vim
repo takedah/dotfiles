@@ -36,7 +36,7 @@ augroup END
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'vim-jp/vimdoc-ja'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'junegunn/fzf', {'dir': '~/.fzf_bin', 'do': './install --all'}
+Plug 'junegunn/fzf', {'do': { -> fzf#install() }}
 Plug 'yuki-yano/fzf-preview.vim', { 'branch': 'release/remote', 'do': ':UpdateRemotePlugins' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'lambdalisue/fern.vim'
@@ -61,7 +61,7 @@ nmap     z        [ff]
 xmap     z        [ff]
 
 "" coc.nvim
-let g:coc_global_extensions = ['coc-jedi', 'coc-json', 'coc-yaml', 'coc-tsserver', 'coc-eslint8', 'coc-prettier', 'coc-sql', 'coc-html', 'coc-sh']
+let g:coc_global_extensions = ['coc-jedi', 'coc-json', 'coc-yaml', 'coc-tsserver', 'coc-eslint8', 'coc-prettier', 'coc-sql', 'coc-html', 'coc-sh', 'coc-git', 'coc-fzf-preview']
 
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
@@ -174,6 +174,7 @@ nnoremap <silent> <C-p>  :<C-u>CocCommand fzf-preview.FromResources buffer proje
 nnoremap <silent> [ff]s  :<C-u>CocCommand fzf-preview.GitStatus<CR>
 nnoremap <silent> [ff]gg :<C-u>CocCommand fzf-preview.GitActions<CR>
 nnoremap <silent> [ff]b  :<C-u>CocCommand fzf-preview.Buffers<CR>
+nnoremap <silent> [ff]mu :<C-u>CocCommand fzf-preview.MruFiles<CR>
 nnoremap          [ff]f  :<C-u>CocCommand fzf-preview.ProjectGrep --add-fzf-arg=--exact --add-fzf-arg=--no-sort<Space>
 xnoremap          [ff]f  "sy:CocCommand fzf-preview.ProjectGrep --add-fzf-arg=--exact --add-fzf-arg=--no-sort<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
 
