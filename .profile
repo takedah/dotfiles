@@ -49,5 +49,12 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 
 # Disable middle click for Thinkpad
-xinput set-button-map "TPPS/2 Elan TrackPoint" 1 0 3 4 5 6 7
+# xinput set-button-map "TPPS/2 Elan TrackPoint" 1 0 3 4 5 6 7
 
+# nvm
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# fzf
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
