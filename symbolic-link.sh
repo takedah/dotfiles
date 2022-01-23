@@ -7,4 +7,5 @@ ln -sf ~/dotfiles/.vimrc ~/.vimrc
 ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
 ln -sf ~/dotfiles/.flake8 ~/.flake8
 ln -sf ~/dotfiles/.config/nvim/init.vim ~/.config/nvim/init.vim
+ln -sf ~/dotfiles/.config/nvim/coc-settings.json ~/.config/nvim/coc-settings.json
 ln -sf ~/dotfiles/.editorconfig ~/.editorconfig
