@@ -45,6 +45,7 @@ Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'jiangmiao/auto-pairs'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'dense-analysis/ale'
 Plug 'sainnhe/gruvbox-material'
 call plug#end()
 
@@ -202,6 +203,18 @@ require('nvim-treesitter.configs').setup {
   },
 }
 EOF
+
+" ale
+let g:ale_set_highlights = 0
+let g:ale_linters = {'python': ['flake8']}
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_fixers = {
+  \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+  \   'python': ['black'],
+  \ }
+let g:ale_fix_on_save = 1
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " vim-airline
 let g:airline#extensions#tabline#enabled = 1
