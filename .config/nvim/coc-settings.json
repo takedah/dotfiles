@@ -40,16 +40,16 @@
     }
   },
   "diagnostic-languageserver.formatFiletypes": {
-    "python": ["black", "isort"]
+    "python": ["isort", "black"]
   },
   "diagnostic-languageserver.formatters": {
-    "black": {
-      "command": "black",
-      "args": ["-q", "-"]
-    },
     "isort": {
       "command": "isort",
-      "args": ["-q", "-"]
+      "args": ["--quiet", "-"]
+    },
+    "black": {
+      "command": "black",
+      "args": ["--quiet", "-"]
     }
   }
 }
