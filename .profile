@@ -60,4 +60,4 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 # browser
-export BROWSER=/usr/bin/wslview
+# export BROWSER=/usr/bin/wslview
