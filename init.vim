@@ -197,6 +197,16 @@ let g:fern#default_hidden=1
 nnoremap <silent> <Leader>e :<C-u>Fern . -drawer<CR>
 nnoremap <silent> <Leader>E :<C-u>Fern . -drawer -reveal=%<CR>
 
+" treesitter
+lua <<EOF
+require('nvim-treesitter.configs').setup {
+  ensure_installed = "all",
+  highlight = {
+    enable = true,
+  },
+}
+EOF
+
 " ale
 let g:ale_set_highlights = 0
 let g:ale_linters = {'python': ['flake8']}
@@ -226,13 +236,3 @@ highlight SpecialKey ctermbg=none
 highlight LineNr ctermbg=none guibg=none
 highlight Folded ctermbg=none guibg=none
 highlight EndOfBuffer ctermbg=none
-
-" treesitter
-lua <<EOF
-require('nvim-treesitter.configs').setup {
-  ensure_installed = "all",
-  highlight = {
-    enable = true,
-  },
-}
-EOF
