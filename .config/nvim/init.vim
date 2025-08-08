@@ -4,7 +4,7 @@ set fileencodings=utf-8,iso-2022-jp,sjis,euc-jp
 set fileformats=unix,dos
 set noswapfile
 set backspace=indent,eol,start
-set autochdir
+" set autochdir
 set autoindent
 set expandtab
 set shiftwidth=4
