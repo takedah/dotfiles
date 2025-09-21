@@ -44,7 +44,7 @@ Plug 'lambdalisue/fern.vim'
 Plug 'lambdalisue/gina.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'jiangmiao/auto-pairs'
-"Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline'
 "Plug 'vim-airline/vim-airline-themes'
 Plug 'dense-analysis/ale'
 Plug 'sainnhe/gruvbox-material'
@@ -210,7 +210,7 @@ nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " vim-airline
-"let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
 
 " gruvbox-material
 let g:gruvbox_material_transparent_background = 1
@@ -230,7 +230,32 @@ highlight EndOfBuffer ctermbg=none
 " treesitter
 lua <<EOF
 require('nvim-treesitter.configs').setup {
-  ensure_installed = "all",
+  ensure_installed = {
+    "bash",
+    "c",
+    "diff",
+    "html",
+    "javascript",
+    "jsdoc",
+    "json",
+    "jsonc",
+    "lua",
+    "luadoc",
+    "luap",
+    "markdown",
+    "markdown_inline",
+    "printf",
+    "python",
+    "query",
+    "regex",
+    "toml",
+    "tsx",
+    "typescript",
+    "vim",
+    "vimdoc",
+    "xml",
+    "yaml"
+  },
   highlight = {
     enable = true,
   },
