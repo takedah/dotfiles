@@ -1,9 +1,13 @@
-# include .profile if it exists
-#if [ -f ~/.profile ]; then
-#    . ~/.profile
-#fi
+# homebrew
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# include .zshrc if it exists
-if [ -f ~/.zshrc ]; then
-  . ~/.zshrc
-fi
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+
+# poetry
+export PATH="$HOME/.local/bin:$PATH"
+
+# nodejs (yarn)
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
