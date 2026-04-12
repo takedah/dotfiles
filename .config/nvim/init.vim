@@ -42,17 +42,14 @@ augroup END
 " Install Plugin
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'vim-jp/vimdoc-ja'
-Plug 'editorconfig/editorconfig-vim'
 Plug 'junegunn/fzf', {'do': { -> fzf#install() }}
 Plug 'junegunn/fzf.vim'
 Plug 'yuki-yano/fzf-preview.vim', { 'branch': 'release/rpc' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'lambdalisue/fern.vim'
-Plug 'lambdalisue/gina.vim'
+Plug 'lambdalisue/gin.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'jiangmiao/auto-pairs'
-"Plug 'vim-airline/vim-airline'
-"Plug 'vim-airline/vim-airline-themes'
 Plug 'dense-analysis/ale'
 Plug 'sainnhe/gruvbox-material'
 Plug 'yaegassy/coc-htmldjango', {'do': 'yarn install --frozen-lockfile'}
@@ -96,11 +93,7 @@ function! CheckBackspace() abort
 endfunction
 
 " Use <c-space> to trigger completion
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
-endif
+inoremap <silent><expr> <c-space> coc#refresh()
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
@@ -124,9 +117,6 @@ function! ShowDocumentation()
   endif
 endfunction
 
-" Highlight the symbol and its references when holding the cursor
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
 " Symbol renaming
 nmap <leader>rn <Plug>(coc-rename)
 
@@ -136,6 +126,8 @@ nmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!
+  " Highlight the symbol and its references when holding the cursor
+  autocmd CursorHold * silent call CocActionAsync('highlight')
   " Setup formatexpr specified filetype(s)
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
   " Update signature help on jump placeholder
@@ -151,7 +143,7 @@ augroup coc_ts
   autocmd FileType typescript,typescriptreact call <SID>coc_typescript_settings()
 augroup END
 
-" Remap keys for applying codeAction to the current buffer.
+" Remap keys for applying codeAction at the cursor position.
 nmap <Leader>ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
 nmap <Leader>qf  <Plug>(coc-fix-current)
@@ -167,7 +159,7 @@ inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float
 vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
 vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 
-" Use CTRL-S for selections ranges.
+" Use CTRL-S for selection ranges.
 " Requires 'textDocument/selectionRange' support of language server.
 nmap <silent> <C-s> <Plug>(coc-range-select)
 xmap <silent> <C-s> <Plug>(coc-range-select)
@@ -206,7 +198,6 @@ nnoremap <silent> <Leader>E :<C-u>Fern . -drawer -reveal=%<CR>
 
 " ale
 let g:ale_set_highlights = 0
-let g:ale_linters = {'python': ['flake8']}
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_fixers = {
   \   '*': ['remove_trailing_lines', 'trim_whitespace'],
@@ -216,15 +207,11 @@ let g:ale_fix_on_save = 1
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
-" vim-airline
-"let g:airline_theme = "wombat"
-"let g:airline#extensions#tabline#enabled = 1
-
 " gruvbox-material
 let g:gruvbox_material_transparent_background = 1
 
 " appearance settings
-syntax enable
+syntax off
 set termguicolors
 set background=dark
 colorscheme gruvbox-material
