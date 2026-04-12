@@ -48,7 +48,6 @@ Plug 'yuki-yano/fzf-preview.vim', { 'branch': 'release/rpc' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'lambdalisue/vim-fern'
 Plug 'lambdalisue/gin.vim'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'jiangmiao/auto-pairs'
 Plug 'dense-analysis/ale'
 Plug 'sainnhe/gruvbox-material'
@@ -221,38 +220,3 @@ highlight SpecialKey ctermbg=none
 highlight LineNr ctermbg=none guibg=none
 highlight Folded ctermbg=none guibg=none
 highlight EndOfBuffer ctermbg=none
-
-" treesitter
-lua <<EOF
-require('nvim-treesitter.configs').setup {
-  ensure_installed = {
-    "bash",
-    "c",
-    "diff",
-    "html",
-    "javascript",
-    "jsdoc",
-    "json",
-    "jsonc",
-    "lua",
-    "luadoc",
-    "luap",
-    "markdown",
-    "markdown_inline",
-    "printf",
-    "python",
-    "query",
-    "regex",
-    "toml",
-    "tsx",
-    "typescript",
-    "vim",
-    "vimdoc",
-    "xml",
-    "yaml"
-  },
-  highlight = {
-    enable = true,
-  },
-}
-EOF
