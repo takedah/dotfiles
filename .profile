@@ -18,7 +18,7 @@ export RBENV_ROOT="$HOME/.rbenv"
 export PATH="$RBENV_ROOT/bin:$PATH"
 eval "$(rbenv init -)"
 
-# poety
+# poetry
 export PATH="$HOME/.local/bin:$PATH"
 
 # nodejs
