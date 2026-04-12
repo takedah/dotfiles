@@ -23,13 +23,6 @@ set cmdheight=2
 set updatetime=300
 set shortmess+=c
 set signcolumn=number
-set statusline=%F
-set statusline+=%m
-set statusline+=%r
-set statusline+=%=
-set statusline+=[%{&fileencoding}]
-set statusline+=[%{&fileformat}]
-set statusline+=[%l/%L]
 filetype plugin indent on
 nnoremap j gj
 nnoremap k gk
@@ -51,6 +44,8 @@ Plug 'lambdalisue/gin.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'dense-analysis/ale'
 Plug 'sainnhe/gruvbox-material'
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'yaegassy/coc-htmldjango', {'do': 'yarn install --frozen-lockfile'}
 Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
 call plug#end()
@@ -220,3 +215,21 @@ highlight SpecialKey ctermbg=none
 highlight LineNr ctermbg=none guibg=none
 highlight Folded ctermbg=none guibg=none
 highlight EndOfBuffer ctermbg=none
+set cursorline
+set relativenumber
+set scrolloff=8
+set sidescrolloff=8
+
+" lualine
+lua <<EOF
+require('lualine').setup {
+  options = {
+    theme = 'gruvbox-material',
+  },
+}
+EOF
+
+" indent-blankline
+lua <<EOF
+require('ibl').setup()
+EOF
