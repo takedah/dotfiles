@@ -210,7 +210,7 @@ nmap <silent> <C-j> <Plug>(ale_next_wrap)
 let g:gruvbox_material_transparent_background = 1
 
 " appearance settings
-syntax off
+syntax on
 set termguicolors
 set background=dark
 colorscheme gruvbox-material
