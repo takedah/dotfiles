@@ -46,7 +46,7 @@ Plug 'junegunn/fzf', {'do': { -> fzf#install() }}
 Plug 'junegunn/fzf.vim'
 Plug 'yuki-yano/fzf-preview.vim', { 'branch': 'release/rpc' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'lambdalisue/fern.vim'
+Plug 'lambdalisue/vim-fern'
 Plug 'lambdalisue/gin.vim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'jiangmiao/auto-pairs'
