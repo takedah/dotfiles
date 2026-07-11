@@ -24,4 +24,4 @@ setopt PROMPT_SUBST ; PS1='[%n@%m %c$(__git_ps1 " (%s)")]\$ '
 source <(fzf --zsh)
 
 # mise
-echo 'eval "$(mise activate zsh)"'
+eval "$(mise activate zsh)"
