@@ -14,6 +14,7 @@ set iskeyword-=_
 set autoread
 set hlsearch
 set list
+set listchars=tab:»\ ,trail:·,extends:›,precedes:‹,nbsp:·
 set laststatus=2
 set showtabline=2
 set hidden
@@ -46,6 +47,7 @@ Plug 'dense-analysis/ale'
 Plug 'sainnhe/gruvbox-material'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'nvim-tree/nvim-web-devicons'
 Plug 'yaegassy/coc-htmldjango', {'do': 'yarn install --frozen-lockfile'}
 Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
 call plug#end()
