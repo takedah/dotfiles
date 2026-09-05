@@ -7,13 +7,6 @@ alias pip='pip3'
 export TERM=xterm-256color
 export CLICOLOR=1
 
-# pyenv
-eval "$(pyenv init -)"
-
-# nodejs (nvm)
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
 # show git branch name
 source ~/.git-prompt.sh
 GIT_PS1_SHOWDIRTYSTATE=true

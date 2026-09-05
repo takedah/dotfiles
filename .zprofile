@@ -1,13 +1,10 @@
 # homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
+# mise (python, node)
+# shims so non-interactive login shells resolve runtimes too;
+# .zshrc runs `mise activate` for interactive shells.
+export PATH="$HOME/.local/share/mise/shims:$PATH"
 
-# poetry
+# uv tool install / poetry
 export PATH="$HOME/.local/bin:$PATH"
-
-# nodejs (yarn)
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
