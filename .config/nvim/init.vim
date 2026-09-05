@@ -28,6 +28,10 @@ filetype plugin indent on
 nnoremap j gj
 nnoremap k gk
 
+" unused providers; keeps :checkhealth quiet and startup a touch faster
+let g:loaded_ruby_provider = 0
+let g:loaded_perl_provider = 0
+
 augroup vimrc-checktime
     autocmd!
     autocmd WinEnter * checktime
@@ -210,7 +214,9 @@ let g:gruvbox_material_transparent_background = 1
 syntax on
 set termguicolors
 set background=dark
-colorscheme gruvbox-material
+" silent! so a fresh machine can still reach :PlugInstall before the
+" colorscheme exists on disk
+silent! colorscheme gruvbox-material
 highlight Normal ctermbg=none
 highlight NonText ctermbg=none
 highlight SpecialKey ctermbg=none
@@ -222,16 +228,18 @@ set relativenumber
 set scrolloff=8
 set sidescrolloff=8
 
-" lualine
+" lualine / indent-blankline
+" pcall for the same reason as the colorscheme above: these modules are not
+" there yet on the very first launch.
 lua <<EOF
-require('lualine').setup {
-  options = {
-    theme = 'gruvbox-material',
-  },
-}
-EOF
-
-" indent-blankline
-lua <<EOF
-require('ibl').setup()
+pcall(function()
+  require('lualine').setup {
+    options = {
+      theme = 'gruvbox-material',
+    },
+  }
+end)
+pcall(function()
+  require('ibl').setup()
+end)
 EOF

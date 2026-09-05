@@ -1,4 +1,5 @@
 #!/bin/bash
+mkdir -p ~/.config/nvim
 ln -sf ~/dotfiles/.bashrc ~/.bashrc
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 ln -sf ~/dotfiles/.profile ~/.profile

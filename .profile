@@ -8,21 +8,13 @@ if [ -d "$HOME/bin" ] ; then
   PATH="$HOME/bin:$PATH"
 fi
 
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
+# mise (python, node, uv)
+# shims so non-interactive login shells resolve runtimes too;
+# .bashrc runs `mise activate` for interactive shells.
+export PATH="$HOME/.local/share/mise/shims:$PATH"
 
-# rbenv
-export RBENV_ROOT="$HOME/.rbenv"
-export PATH="$RBENV_ROOT/bin:$PATH"
-eval "$(rbenv init -)"
-
-# poetry
+# uv tool install / pipx
 export PATH="$HOME/.local/bin:$PATH"
-
-# nodejs
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # User Define PATH
 export TERM=rxvt-unicode-256color
@@ -50,10 +42,6 @@ export XDG_DATA_HOME="$HOME/.local/share"
 
 # Disable middle click for Thinkpad
 # xinput set-button-map "TPPS/2 Elan TrackPoint" 1 0 3 4 5 6 7
-
-# nvm
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 # fzf
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
