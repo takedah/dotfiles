@@ -4,7 +4,6 @@ alias sudo='sudo -E '
 alias python='python3'
 alias pip='pip3'
 
-export TERM=xterm-256color
 export CLICOLOR=1
 
 # show git branch name
