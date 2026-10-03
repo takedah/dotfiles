@@ -77,6 +77,14 @@ $ mise exec -- uv tool install jedi-language-server
 $ mise exec -- uv tool install black
 $ mise exec -- uv tool install isort
 $ mise exec -- uv tool install flake8
+$ mise exec -- uv tool install git-remote-codecommit
+```
+
+uv tool の venv はインストール時の mise の Python を参照する。
+Python を上げて古いバージョンを消したら作り直す。
+
+```console
+$ mise exec -- uv tool upgrade --all --reinstall
 ```
 
 Neovim の provider は mise の default packages に任せる。
