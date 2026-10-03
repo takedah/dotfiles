@@ -30,6 +30,9 @@ Ubuntu 側は [takedah/ubuntu_playbooks](https://github.com/takedah/ubuntu_playb
 | `.tmux/linux.conf` | Ubuntu | OSC 52 でコピー。GUI セッションなら `wl-copy` / `xsel` |
 | `.config/nvim/init.vim` | 両方 | Neovim 本体設定、プラグイン、キーマップ |
 | `.config/nvim/coc-settings.json` | 両方 | coc.nvim の LSP / フォーマッタ設定 |
+| `.config/mise/config.toml` | 両方 | mise のグローバルなツール（Python / Node.js / uv と Python 製 CLI） |
+| `.default-python-packages` | 両方 | Python を入れたときに自動で入るパッケージ（pynvim） |
+| `.default-npm-packages` | 両方 | Node.js を入れたときに自動で入るパッケージ |
 | `.editorconfig` | 両方 | 言語ごとのインデント幅 |
 | `.flake8` | 両方 | black に合わせた flake8 設定（max-line-length 88） |
 
@@ -71,36 +74,23 @@ $ ~/dotfiles/symbolic-link.sh
 依存コマンドを入れる。
 
 ```console
-$ brew install mise tmux neovim fzf ripgrep bat fd yarn
-$ mise use --global python@3.14.7 node@22 uv@latest
-$ mise exec -- uv tool install jedi-language-server
-$ mise exec -- uv tool install black
-$ mise exec -- uv tool install isort
-$ mise exec -- uv tool install flake8
-$ mise exec -- uv tool install git-remote-codecommit
+$ brew install mise tmux neovim fzf ripgrep bat fd
+$ mise install
 ```
 
-uv tool の venv はインストール時の mise の Python を参照する。
-Python を上げて古いバージョンを消したら作り直す。
+`mise install` は `~/.config/mise/config.toml` に書いたランタイムと
+Python 製の CLI ツール（black / isort / flake8 / jedi-language-server /
+git-remote-codecommit / cfn-lint / pytest）を入れる。CLI ツールは mise の `pypi` バックエンド
+（旧 `pipx`）が uv でツールごとの venv に入れ、mise の shims から呼ばれる。
+venv は uv が管理する Python を使うので、mise の Python を上げても壊れない。
+ツールの更新は `mise upgrade`。
 
-```console
-$ mise exec -- uv tool upgrade --all --reinstall
-```
+Neovim の provider と yarn は mise の default packages
+（`.default-python-packages` / `.default-npm-packages`）に任せる。
+ランタイムを入れたときに自動で入るので、バージョンを上げても入り直す。
 
-Neovim の provider は mise の default packages に任せる。
-ここに書いておくと、ランタイムのバージョンを上げたときに自動で入り直す。
-
-```console
-$ cat ~/.default-python-packages
-pynvim
-$ cat ~/.default-npm-packages
-neovim
-diagnostic-languageserver
-typescript
-```
-
-Ubuntu 側は yarn も default-npm-packages で入れているが、macOS は
-Homebrew 版を使っている。
+バージョンを変えるときは `mise use --global python@x.y.z` でよい。
+リンク先のリポジトリのファイルが書き換わるので、そのままコミットする。
 
 最後に `nvim` を対話的に起動する。vim-plug が入っていれば `:PlugInstall`、
 その後 `g:coc_global_extensions` の拡張が非同期で入る。

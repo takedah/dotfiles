@@ -1,5 +1,5 @@
 #!/bin/bash
-mkdir -p ~/.config/nvim
+mkdir -p ~/.config/nvim ~/.config/mise
 ln -sf ~/dotfiles/.bashrc ~/.bashrc
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 ln -sf ~/dotfiles/.profile ~/.profile
@@ -10,5 +10,8 @@ ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
 ln -sf ~/dotfiles/.flake8 ~/.flake8
 ln -sf ~/dotfiles/.config/nvim/init.vim ~/.config/nvim/init.vim
 ln -sf ~/dotfiles/.config/nvim/coc-settings.json ~/.config/nvim/coc-settings.json
+ln -sf ~/dotfiles/.config/mise/config.toml ~/.config/mise/config.toml
+ln -sf ~/dotfiles/.default-python-packages ~/.default-python-packages
+ln -sf ~/dotfiles/.default-npm-packages ~/.default-npm-packages
 ln -sf ~/dotfiles/.editorconfig ~/.editorconfig
 ln -sf ~/dotfiles/.git-prompt.sh ~/.git-prompt.sh

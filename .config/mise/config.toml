@@ -1,0 +1,11 @@
+[tools]
+node = "22"
+python = "3.14.7"
+uv = "latest"
+"pypi:black" = "latest"
+"pypi:cfn-lint" = "latest"
+"pypi:flake8" = "latest"
+"pypi:git-remote-codecommit" = "latest"
+"pypi:isort" = "latest"
+"pypi:jedi-language-server" = "latest"
+"pypi:pytest" = "latest"
