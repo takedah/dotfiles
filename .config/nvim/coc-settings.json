@@ -22,5 +22,10 @@
       "command": "black",
       "args": ["--quiet", "-"]
     }
-  }
+  },
+  "prettier.requireConfig": true,
+  "[typescript][typescriptreact][javascript][json][yaml][markdown][css]": {
+    "coc.preferences.formatOnSave": true
+  },
+  "eslint.autoFixOnSave": true
 }
