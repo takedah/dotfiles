@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-mkdir -p ~/.config/nvim ~/.config/mise ~/.claude ~/.local/bin
+mkdir -p ~/.config/nvim ~/.config/mise ~/.claude ~/.codex ~/.local/bin
 ln -sf ~/dotfiles/.bashrc ~/.bashrc
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 ln -sf ~/dotfiles/.profile ~/.profile
@@ -23,3 +23,7 @@ ln -sf ~/dotfiles/.claude/CLAUDE.md ~/.claude/CLAUDE.md
 ln -sf ~/dotfiles/.local/bin/claude-safe ~/.local/bin/claude-safe
 ln -sf ~/dotfiles/.local/bin/claude-aws ~/.local/bin/claude-aws
 ln -sf ~/dotfiles/.local/bin/claude-gh ~/.local/bin/claude-gh
+ln -sf ~/dotfiles/codex/aws.config.toml ~/.codex/aws.config.toml
+ln -sf ~/dotfiles/codex/gh.config.toml ~/.codex/gh.config.toml
+ln -sf ~/dotfiles/.local/bin/codex-aws ~/.local/bin/codex-aws
+ln -sf ~/dotfiles/.local/bin/codex-gh ~/.local/bin/codex-gh

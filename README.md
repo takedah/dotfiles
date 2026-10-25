@@ -42,6 +42,10 @@ Ubuntu 側は [takedah/ubuntu_playbooks](https://github.com/takedah/ubuntu_playb
 | `.local/bin/claude-safe` | 両方 | Claude Code を認証情報なしで起動するラッパー |
 | `.local/bin/claude-aws` | 両方 | AWS の資格情報を渡して Claude Code を起動するラッパー |
 | `.local/bin/claude-gh` | 両方 | GitHub の資格情報を渡して Claude Code を起動するラッパー |
+| `codex/aws.config.toml` | 両方 | Codex の AWS セッション用プロファイル（`AWS_*` だけ渡す、通信先の制限） |
+| `codex/gh.config.toml` | 両方 | Codex の GitHub セッション用プロファイル（`GH_TOKEN` だけ渡す、通信先の制限） |
+| `.local/bin/codex-aws` | 両方 | AWS の資格情報を渡して Codex を起動するラッパー |
+| `.local/bin/codex-gh` | 両方 | GitHub の資格情報を渡して Codex を起動するラッパー |
 
 `symbolic-link.sh` は macOS 用の `.zshrc` / `.zprofile` も含めて全部リンクする。
 Ubuntu では zsh を使わない限り読まれないので実害はない。
@@ -138,6 +142,36 @@ macOS の `.zshrc` では `alias claude='claude-safe'` を設定しているの�
   例: `claude-aws prod -- --resume`
 - `claude-gh` の既定は、`gh` にログイン済みの OAuth トークンを使う。このトークンは権限が広いことがある。
   権限を絞りたいときは、`--prompt-pat` で fine-grained PAT を入力する。
+
+## Codex
+
+Claude Code と同じく、AWS と GitHub の資格情報は、ラッパーで起動したセッションだけに渡す。
+
+`symbolic-link.sh` が `codex/*.config.toml` を `~/.codex/` へ、`.local/bin/codex-*` を `~/.local/bin/` へリンクする。
+`~/.codex/config.toml` は Codex が自動で書き換えるため、このリポジトリでは管理しない。
+プロファイルは、`config.toml` で定義した権限プロファイル `secure` を `extends` で引き継ぐ。
+
+### 起動方法
+
+| コマンド | 用途 | 資格情報 |
+|---|---|---|
+| `codex` | 通常のセッション | 渡さない（`config.toml` の `inherit = "core"` で除外） |
+| `codex-aws <profile> -- <args>` | AWS 資格情報が必要なセッション | `aws configure export-credentials` で取得 |
+| `codex-gh [--use-gh-token] -- <args>` | GitHub 資格情報が必要なセッション | 既定は fine-grained PAT を入力。`--use-gh-token` なら `gh auth token` |
+
+### Claude Code との違い
+
+- Codex には `mask` に当たる機能がない。渡した資格情報は、エージェントが `env` などで読める。
+  権限を絞った短命な資格情報を使う。
+- 子プロセスには、`shell_environment_policy.filters` で許可した変数だけを渡す。
+- 通信先の制限は `features.network_proxy`（experimental）で行う。プロキシは TLS を終端して検査する。
+
+### 動作確認
+
+```console
+$ AWS_ACCESS_KEY_ID=dummy FOO_TOKEN=dummy codex sandbox -p aws -- env | cut -d= -f1 | sort
+$ codex sandbox -p aws -- curl -sS -o /dev/null -w '%{http_code}\n' https://example.com/   # 403 で拒否される
+```
 
 ## Key bindings
 

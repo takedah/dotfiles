@@ -1,0 +1,33 @@
+default_permissions = "aws"
+
+[features]
+network_proxy = true
+
+[permissions.aws]
+extends = "secure"
+
+[permissions.aws.network]
+enabled = true
+mode = "limited"
+
+[permissions.aws.network.domains]
+"*.amazonaws.com" = "allow"
+"*.api.aws" = "allow"
+
+[shell_environment_policy]
+inherit = "all"
+ignore_default_excludes = true
+
+[shell_environment_policy.filters]
+"PATH" = "include"
+"HOME" = "include"
+"USER" = "include"
+"SHELL" = "include"
+"TMPDIR" = "include"
+"LANG" = "include"
+"TERM" = "include"
+"AWS_ACCESS_KEY_ID" = "include"
+"AWS_SECRET_ACCESS_KEY" = "include"
+"AWS_SESSION_TOKEN" = "include"
+"AWS_REGION" = "include"
+"AWS_DEFAULT_REGION" = "include"

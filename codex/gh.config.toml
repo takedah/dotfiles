@@ -1,0 +1,31 @@
+default_permissions = "gh"
+
+[features]
+network_proxy = true
+
+[permissions.gh]
+extends = "secure"
+
+[permissions.gh.network]
+enabled = true
+mode = "limited"
+
+[permissions.gh.network.domains]
+"github.com" = "allow"
+"api.github.com" = "allow"
+
+[shell_environment_policy]
+inherit = "all"
+ignore_default_excludes = true
+
+[shell_environment_policy.filters]
+"PATH" = "include"
+"HOME" = "include"
+"USER" = "include"
+"SHELL" = "include"
+"TMPDIR" = "include"
+"LANG" = "include"
+"TERM" = "include"
+"GH_TOKEN" = "include"
+"GIT_CONFIG_*" = "include"
+"GIT_TERMINAL_PROMPT" = "include"
