@@ -15,4 +15,6 @@ if [[ -z "$CLAUDE_BIN" ]]; then
   exit 127
 fi
 
-exec "$CLAUDE_BIN" "$@"
+exec "$CLAUDE_BIN" --system-prompt-snapshot off \
+  --append-system-prompt "このセッションは claude-safe で起動した通常のセッションである。AWS と GitHub の資格情報は使えない。" \
+  "$@"

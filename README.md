@@ -142,6 +142,8 @@ macOS の `.zshrc` では `alias claude='claude-safe'` を設定しているの�
   例: `claude-aws prod -- --resume`
 - `claude-gh` の既定は、`gh` にログイン済みの OAuth トークンを使う。このトークンは権限が広いことがある。
   権限を絞りたいときは、`--prompt-pat` で fine-grained PAT を入力する。
+- ラッパーは `--append-system-prompt` で起動方法を Claude に伝える。`CLAUDE.md` はそれを見て、認証情報が必要な作業を止めるかを判断する。
+  `--system-prompt-snapshot off` を付けているので、別のラッパーで resume しても、いま起動したラッパーの内容が使われる。
 
 ## Codex
 

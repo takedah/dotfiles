@@ -66,4 +66,6 @@ export GIT_CONFIG_KEY_3="url.https://github.com/.insteadOf"
 export GIT_CONFIG_VALUE_3="ssh://git@github.com/"
 export GIT_TERMINAL_PROMPT=0
 
-exec "$CLAUDE_BIN" --settings "$SETTINGS_FILE" "$@"
+exec "$CLAUDE_BIN" --settings "$SETTINGS_FILE" --system-prompt-snapshot off \
+  --append-system-prompt "このセッションは claude-gh で起動した。GitHub の資格情報（GH_TOKEN）は mask された環境変数として使える。AWS の資格情報は使えない。" \
+  "$@"
