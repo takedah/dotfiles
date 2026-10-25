@@ -3,6 +3,7 @@ alias vi='nvim'
 alias sudo='sudo -E '
 alias python='python3'
 alias pip='pip3'
+alias claude='claude-safe'
 
 export CLICOLOR=1
 
