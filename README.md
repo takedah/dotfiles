@@ -150,7 +150,8 @@ macOS の `.zshrc` では `alias claude='claude-safe'` を設定しているの�
 Claude Code と同じく、AWS と GitHub の資格情報は、ラッパーで起動したセッションだけに渡す。
 
 `symbolic-link.sh` が `.codex/*.config.toml` を `~/.codex/` へ、`.local/bin/codex-*` を `~/.local/bin/` へリンクする。
-`.codex/` は Claude Code のセッションから読めないようにしているので、編集は Claude Code の外で行う。
+`~/.codex` 本体は Claude Code から読めないが、リポジトリの `.codex/` は読める。
+`settings.json` の禁止規則を `//Users/*/.codex/**` にして、ホーム直下の `~/.codex` だけを対象にしている。
 `~/.codex/config.toml` は Codex が自動で書き換えるため、このリポジトリでは管理しない。
 プロファイルは、`config.toml` で定義した権限プロファイル `secure` を `extends` で引き継ぐ。
 
