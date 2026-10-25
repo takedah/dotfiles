@@ -1,2 +1,3 @@
 installer.sh
 *.log
+.DS_Store
