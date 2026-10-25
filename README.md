@@ -35,6 +35,13 @@ Ubuntu 側は [takedah/ubuntu_playbooks](https://github.com/takedah/ubuntu_playb
 | `.default-npm-packages` | 両方 | Node.js を入れたときに自動で入るパッケージ |
 | `.editorconfig` | 両方 | 言語ごとのインデント幅 |
 | `.flake8` | 両方 | black に合わせた flake8 設定（max-line-length 88） |
+| `.claude/settings.json` | 両方 | Claude Code の通常セッションの設定（読み取り拒否、sandbox） |
+| `.claude/settings-aws.json` | 両方 | AWS セッション用の追加設定（`AWS_*` の mask、通信先の制限） |
+| `.claude/settings-gh.json` | 両方 | GitHub セッション用の追加設定（`GH_TOKEN` の mask、通信先の制限） |
+| `.claude/CLAUDE.md` | 両方 | Claude Code 全体への指示（認証情報が必要な作業の扱い、変更時の承認ルール） |
+| `.local/bin/claude-safe` | 両方 | Claude Code を認証情報なしで起動するラッパー |
+| `.local/bin/claude-aws` | 両方 | AWS の資格情報を渡して Claude Code を起動するラッパー |
+| `.local/bin/claude-gh` | 両方 | GitHub の資格情報を渡して Claude Code を起動するラッパー |
 
 `symbolic-link.sh` は macOS 用の `.zshrc` / `.zprofile` も含めて全部リンクする。
 Ubuntu では zsh を使わない限り読まれないので実害はない。
@@ -96,6 +103,41 @@ Neovim の provider と yarn は mise の default packages
 その後 `g:coc_global_extensions` の拡張が非同期で入る。
 `:checkhealth` で `python3` と `node` が OK、`ruby` / `perl` が
 disabled になっていれば想定どおり。
+
+## Claude Code
+
+Claude Code のセッションから、重要な認証情報を原則読めないようにしている。
+AWS と GitHub の資格情報は、明示的に環境変数へセットして起動したセッションだけが使える。
+
+`symbolic-link.sh` が `.claude/settings*.json` を `~/.claude/` へ、`.local/bin/claude-*` を `~/.local/bin/` へリンクする。
+
+### 起動方法
+
+| コマンド | 用途 | 資格情報 |
+|---|---|---|
+| `claude-safe` | 通常のセッション | 渡さない（AWS / GitHub の環境変数を削除して起動） |
+| `claude-aws <profile> -- <args>` | AWS 資格情報が必要なセッション | `aws configure export-credentials` で取得して環境変数にセット |
+| `claude-gh [--prompt-pat] -- <args>` | GitHub 資格情報が必要なセッション | `gh auth token` で取得。`--prompt-pat` なら PAT を入力 |
+
+ラッパーの実体はリポジトリの `.local/bin/` にあり、`~/.local/bin/` からリンクされる。
+ラッパーは本体の `claude` を PATH から探して起動する。
+
+macOS の `.zshrc` では `alias claude='claude-safe'` を設定しているので、
+`claude` と入力すると通常セッションになる。
+`/opt/homebrew/bin/claude` を直接実行するとラッパーを通らないため、この仕組みの対象外になる。
+
+### 認証情報の扱い
+
+- 認証情報は Claude Code の外側で取得し、起動したプロセスの環境変数としてだけ渡す。ファイルには書かない。
+- ラッパーは、起動前に既存の AWS / GitHub の認証関連の環境変数を削除する。
+- `settings-aws.json` と `settings-gh.json` は `--settings` で読み込む。Claude から認証情報の値を直接読めないよう、`mask` を指定している。
+  ただし、認証情報は `claude` プロセスの環境変数には存在する。
+- 通信先は sandbox の `allowedDomains` で制限している。AWS は `*.amazonaws.com` と `*.api.aws`、GitHub は `github.com` と `api.github.com` だけ。
+- AWS の資格情報には期限がある。期限が切れたら、セッションを起動し直す。SSO のプロファイルは、先に `aws sso login --profile <profile>` を実行する。
+- `claude-aws` の最初の引数は、必ずプロファイル名として扱われる。Claude へ渡す引数は `--` の後に書く。
+  例: `claude-aws prod -- --resume`
+- `claude-gh` の既定は、`gh` にログイン済みの OAuth トークンを使う。このトークンは権限が広いことがある。
+  権限を絞りたいときは、`--prompt-pat` で fine-grained PAT を入力する。
 
 ## Key bindings
 

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Normal Claude Code session: do not inherit AWS/GitHub credentials.
+unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SECURITY_TOKEN 2>/dev/null || true
+unset AWS_PROFILE AWS_DEFAULT_PROFILE AWS_SHARED_CREDENTIALS_FILE AWS_CONFIG_FILE 2>/dev/null || true
+unset AWS_WEB_IDENTITY_TOKEN_FILE AWS_ROLE_ARN AWS_ROLE_SESSION_NAME 2>/dev/null || true
+unset AWS_CONTAINER_CREDENTIALS_RELATIVE_URI AWS_CONTAINER_CREDENTIALS_FULL_URI 2>/dev/null || true
+unset AWS_CONTAINER_AUTHORIZATION_TOKEN AWS_CONTAINER_AUTHORIZATION_TOKEN_FILE 2>/dev/null || true
+unset GH_TOKEN GITHUB_TOKEN GH_ENTERPRISE_TOKEN GITHUB_ENTERPRISE_TOKEN 2>/dev/null || true
+
+CLAUDE_BIN="$(command -v claude || true)"
+if [[ -z "$CLAUDE_BIN" ]]; then
+  echo "error: claude command not found in PATH" >&2
+  exit 127
+fi
+
+exec "$CLAUDE_BIN" "$@"

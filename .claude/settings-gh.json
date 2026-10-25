@@ -1,0 +1,31 @@
+{
+  "enabledPlugins": {
+    "aws-core@claude-plugins-official": false
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": false,
+    "allowUnsandboxedCommands": false,
+    "failIfUnavailable": true,
+    "network": {
+      "strictAllowlist": true,
+      "tlsTerminate": {},
+      "allowedDomains": [
+        "github.com",
+        "api.github.com"
+      ]
+    },
+    "credentials": {
+      "envVars": [
+        {
+          "name": "GH_TOKEN",
+          "mode": "mask",
+          "injectHosts": [
+            "github.com",
+            "api.github.com"
+          ]
+        }
+      ]
+    }
+  }
+}

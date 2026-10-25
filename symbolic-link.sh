@@ -1,5 +1,6 @@
 #!/bin/bash
-mkdir -p ~/.config/nvim ~/.config/mise
+set -e
+mkdir -p ~/.config/nvim ~/.config/mise ~/.claude ~/.local/bin
 ln -sf ~/dotfiles/.bashrc ~/.bashrc
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 ln -sf ~/dotfiles/.profile ~/.profile
@@ -15,3 +16,10 @@ ln -sf ~/dotfiles/.default-python-packages ~/.default-python-packages
 ln -sf ~/dotfiles/.default-npm-packages ~/.default-npm-packages
 ln -sf ~/dotfiles/.editorconfig ~/.editorconfig
 ln -sf ~/dotfiles/.git-prompt.sh ~/.git-prompt.sh
+ln -sf ~/dotfiles/.claude/settings.json ~/.claude/settings.json
+ln -sf ~/dotfiles/.claude/settings-aws.json ~/.claude/settings-aws.json
+ln -sf ~/dotfiles/.claude/settings-gh.json ~/.claude/settings-gh.json
+ln -sf ~/dotfiles/.claude/CLAUDE.md ~/.claude/CLAUDE.md
+ln -sf ~/dotfiles/.local/bin/claude-safe ~/.local/bin/claude-safe
+ln -sf ~/dotfiles/.local/bin/claude-aws ~/.local/bin/claude-aws
+ln -sf ~/dotfiles/.local/bin/claude-gh ~/.local/bin/claude-gh

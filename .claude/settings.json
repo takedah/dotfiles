@@ -1,0 +1,50 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run lint)",
+      "Bash(npm run test *)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(~/.aws/**)",
+      "Read(//Users/**/.aws/**)",
+      "Read(~/.ssh/**)",
+      "Read(//Users/**/.ssh/**)",
+      "Read(~/.codex/**)",
+      "Read(//Users/**/.codex/**)",
+      "Read(~/.config/gh/**)",
+      "Read(//Users/**/.config/gh/**)",
+      "Read(~/.claude/.credentials.json)",
+      "Read(//Users/**/.claude/.credentials.json)",
+      "Read(~/.claude.json)",
+      "Read(//Users/**/.claude.json)"
+    ],
+    "blockReadsOutsideWorkingDirectories": true
+  },
+  "model": "haiku",
+  "enabledPlugins": {
+    "aws-core@claude-plugins-official": false,
+    "aws-agents@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {},
+  "sandbox": {
+    "enabled": true,
+    "failIfUnavailable": true,
+    "autoAllowBashIfSandboxed": false,
+    "allowUnsandboxedCommands": false,
+    "filesystem": {
+      "denyRead": [
+        "~/.ssh",
+        "~/.aws",
+        "~/.codex",
+        "~/.config/gh",
+        "~/.claude/.credentials.json",
+        "~/.claude.json",
+        "~/**/.env",
+        "~/**/.env.*"
+      ]
+    }
+  },
+  "tui": "fullscreen"
+}

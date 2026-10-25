@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+USE_PROMPT=0
+if [[ "${1:-}" == "--prompt-pat" ]]; then
+  USE_PROMPT=1
+  shift
+fi
+if [[ "${1:-}" == "--" ]]; then
+  shift
+fi
+
+command -v gh >/dev/null 2>&1 || {
+  echo "error: GitHub CLI (gh) not found in PATH" >&2
+  exit 127
+}
+CLAUDE_BIN="$(command -v claude || true)"
+if [[ -z "$CLAUDE_BIN" ]]; then
+  echo "error: claude command not found in PATH" >&2
+  exit 127
+fi
+
+SETTINGS_FILE="$HOME/.claude/settings-gh.json"
+if [[ ! -r "$SETTINGS_FILE" ]]; then
+  echo "error: $SETTINGS_FILE not found or not readable" >&2
+  exit 1
+fi
+
+# Do not accidentally carry AWS credentials into a GitHub-only session.
+unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SECURITY_TOKEN 2>/dev/null || true
+unset AWS_PROFILE AWS_DEFAULT_PROFILE AWS_SHARED_CREDENTIALS_FILE AWS_CONFIG_FILE 2>/dev/null || true
+unset AWS_WEB_IDENTITY_TOKEN_FILE AWS_ROLE_ARN AWS_ROLE_SESSION_NAME 2>/dev/null || true
+unset AWS_CONTAINER_CREDENTIALS_RELATIVE_URI AWS_CONTAINER_CREDENTIALS_FULL_URI 2>/dev/null || true
+unset AWS_CONTAINER_AUTHORIZATION_TOKEN AWS_CONTAINER_AUTHORIZATION_TOKEN_FILE 2>/dev/null || true
+
+# Prevent another GitHub token variable from taking precedence.
+unset GH_TOKEN GITHUB_TOKEN GH_ENTERPRISE_TOKEN GITHUB_ENTERPRISE_TOKEN 2>/dev/null || true
+
+if [[ "$USE_PROMPT" -eq 1 ]]; then
+  read -rsp "GitHub fine-grained PAT: " GH_TOKEN
+  echo
+  if [[ -z "$GH_TOKEN" ]]; then
+    echo "error: empty GitHub token" >&2
+    exit 1
+  fi
+  export GH_TOKEN
+else
+  if ! GH_TOKEN="$(gh auth token --hostname github.com)"; then
+    echo "error: could not obtain a token from GitHub CLI." >&2
+    echo "Run 'gh auth login --git-protocol https' first, or use --prompt-pat." >&2
+    exit 1
+  fi
+  export GH_TOKEN
+fi
+
+# Make ordinary git HTTPS operations use gh as the credential helper for this
+# Claude session only. Also rewrite common GitHub SSH remote forms to HTTPS.
+export GIT_CONFIG_COUNT=4
+export GIT_CONFIG_KEY_0="credential.helper"
+export GIT_CONFIG_VALUE_0=""
+export GIT_CONFIG_KEY_1="credential.https://github.com.helper"
+export GIT_CONFIG_VALUE_1='!gh auth git-credential'
+export GIT_CONFIG_KEY_2="url.https://github.com/.insteadOf"
+export GIT_CONFIG_VALUE_2="git@github.com:"
+export GIT_CONFIG_KEY_3="url.https://github.com/.insteadOf"
+export GIT_CONFIG_VALUE_3="ssh://git@github.com/"
+export GIT_TERMINAL_PROMPT=0
+
+exec "$CLAUDE_BIN" --settings "$SETTINGS_FILE" "$@"
