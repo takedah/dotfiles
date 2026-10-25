@@ -61,5 +61,5 @@ unset REGION
 unset AWS_PROFILE AWS_DEFAULT_PROFILE
 
 exec "$CLAUDE_BIN" --settings "$SETTINGS_FILE" --system-prompt-snapshot off \
-  --append-system-prompt "このセッションは claude-aws で起動した（AWS プロファイル: $PROFILE）。AWS の資格情報は mask された環境変数として使える。GitHub の資格情報は使えない。" \
+  --append-system-prompt "このセッションは claude-aws で起動した（AWS プロファイル: ${PROFILE}）。AWS の資格情報は mask された環境変数として使える。GitHub の資格情報は使えない。" \
   "$@"
