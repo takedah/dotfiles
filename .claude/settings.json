@@ -22,7 +22,7 @@
     ],
     "blockReadsOutsideWorkingDirectories": true
   },
-  "model": "haiku",
+  "model": "opus",
   "enabledPlugins": {
     "aws-core@claude-plugins-official": false,
     "aws-agents@claude-plugins-official": true
