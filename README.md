@@ -42,8 +42,8 @@ Ubuntu 側は [takedah/ubuntu_playbooks](https://github.com/takedah/ubuntu_playb
 | `.local/bin/claude-safe` | 両方 | Claude Code を認証情報なしで起動するラッパー |
 | `.local/bin/claude-aws` | 両方 | AWS の資格情報を渡して Claude Code を起動するラッパー |
 | `.local/bin/claude-gh` | 両方 | GitHub の資格情報を渡して Claude Code を起動するラッパー |
-| `codex/aws.config.toml` | 両方 | Codex の AWS セッション用プロファイル（`AWS_*` だけ渡す、通信先の制限） |
-| `codex/gh.config.toml` | 両方 | Codex の GitHub セッション用プロファイル（`GH_TOKEN` だけ渡す、通信先の制限） |
+| `.codex/aws.config.toml` | 両方 | Codex の AWS セッション用プロファイル（`AWS_*` だけ渡す、通信先の制限） |
+| `.codex/gh.config.toml` | 両方 | Codex の GitHub セッション用プロファイル（`GH_TOKEN` だけ渡す、通信先の制限） |
 | `.local/bin/codex-aws` | 両方 | AWS の資格情報を渡して Codex を起動するラッパー |
 | `.local/bin/codex-gh` | 両方 | GitHub の資格情報を渡して Codex を起動するラッパー |
 
@@ -149,7 +149,8 @@ macOS の `.zshrc` では `alias claude='claude-safe'` を設定しているの�
 
 Claude Code と同じく、AWS と GitHub の資格情報は、ラッパーで起動したセッションだけに渡す。
 
-`symbolic-link.sh` が `codex/*.config.toml` を `~/.codex/` へ、`.local/bin/codex-*` を `~/.local/bin/` へリンクする。
+`symbolic-link.sh` が `.codex/*.config.toml` を `~/.codex/` へ、`.local/bin/codex-*` を `~/.local/bin/` へリンクする。
+`.codex/` は Claude Code のセッションから読めないようにしているので、編集は Claude Code の外で行う。
 `~/.codex/config.toml` は Codex が自動で書き換えるため、このリポジトリでは管理しない。
 プロファイルは、`config.toml` で定義した権限プロファイル `secure` を `extends` で引き継ぐ。
 
