@@ -43,6 +43,9 @@
         "~/.claude.json",
         "~/**/.env",
         "~/**/.env.*"
+      ],
+      "allowRead": [
+        "~/.agents/skills"
       ]
     }
   },
