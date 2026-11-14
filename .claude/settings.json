@@ -20,7 +20,10 @@
       "Read(~/.claude.json)",
       "Read(//Users/**/.claude.json)"
     ],
-    "blockReadsOutsideWorkingDirectories": true
+    "blockReadsOutsideWorkingDirectories": true,
+    "additionalDirectories": [
+      "~/.agents/skills"
+    ]
   },
   "model": "opus",
   "enabledPlugins": {
