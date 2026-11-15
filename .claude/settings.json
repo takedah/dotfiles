@@ -48,7 +48,8 @@
         "~/**/.env.*"
       ],
       "allowRead": [
-        "~/.agents/skills"
+        "~/.agents/skills",
+        "~/.local/share/mise"
       ]
     }
   },
