@@ -189,12 +189,19 @@ Google Antigravity は CLI（`agy`）だけを対象にする。IDE とアプリ
 ### 導入
 
 ```console
-$ curl -fsSL https://antigravity.google/cli/install.sh | bash -s -- --skip-aliases --skip-path
+$ curl -fsSL https://antigravity.google/cli/install.sh | bash
+$ cd ~/dotfiles && git checkout -- .bash_profile .bashrc .profile .zprofile .zshrc
 $ agy-safe   # 初回はブラウザでログイン。トークンは OS のキーチェーンに保存される
 ```
 
-インストーラは既定でシェルの設定ファイル（エイリアスと PATH）を書き換える。
-`.zshrc` などはこのリポジトリへのリンクなので、`--skip-aliases --skip-path` で書き換えを止める。
+インストーラは最後に `agy install` を実行し、シェルの設定ファイルを書き換える。
+`install.sh` が受け付けるオプションは `--dir` だけなので、この書き換えは止められない。
+
+- `.zshrc` の `alias agy='agy-safe'` を削除する。残すと `agy` がラッパーを通らずに起動する。
+- 各ファイルの末尾に、ユーザー名を含む絶対パスで `~/.local/bin` を PATH に足す。
+
+`.zshrc` などはこのリポジトリへのリンクなので、変更はリポジトリに出る。導入後に `git checkout` で戻す。
+リンクが通常のファイルに置き換わっていたら、`symbolic-link.sh` を実行し直す。
 `agy` は `~/.local/bin/agy` に入り、PATH は `.zprofile` / `.profile` で通っている。
 
 ### 設定の管理
