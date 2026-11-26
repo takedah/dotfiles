@@ -23,6 +23,7 @@ ln -sf ~/dotfiles/.claude/CLAUDE.md ~/.claude/CLAUDE.md
 ln -sf ~/dotfiles/.local/bin/claude-safe ~/.local/bin/claude-safe
 ln -sf ~/dotfiles/.local/bin/claude-aws ~/.local/bin/claude-aws
 ln -sf ~/dotfiles/.local/bin/claude-gh ~/.local/bin/claude-gh
+ln -sf ~/dotfiles/.codex/AGENTS.md ~/.codex/AGENTS.md
 ln -sf ~/dotfiles/.codex/aws.config.toml ~/.codex/aws.config.toml
 ln -sf ~/dotfiles/.codex/gh.config.toml ~/.codex/gh.config.toml
 ln -sf ~/dotfiles/.local/bin/codex-aws ~/.local/bin/codex-aws

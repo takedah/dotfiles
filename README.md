@@ -38,10 +38,11 @@ Ubuntu 側は [takedah/ubuntu_playbooks](https://github.com/takedah/ubuntu_playb
 | `.claude/settings.json` | 両方 | Claude Code の通常セッションの設定（読み取り拒否、sandbox） |
 | `.claude/settings-aws.json` | 両方 | AWS セッション用の追加設定（`AWS_*` の mask、通信先の制限） |
 | `.claude/settings-gh.json` | 両方 | GitHub セッション用の追加設定（`GH_TOKEN` の mask、通信先の制限） |
-| `.claude/CLAUDE.md` | 両方 | Claude Code 全体への指示（認証情報が必要な作業の扱い、変更時の承認ルール） |
+| `.claude/CLAUDE.md` | 両方 | Claude Code 全体への指示（役割分担、認証情報が必要な作業の扱い、変更時の承認ルール） |
 | `.local/bin/claude-safe` | 両方 | Claude Code を認証情報なしで起動するラッパー |
 | `.local/bin/claude-aws` | 両方 | AWS の資格情報を渡して Claude Code を起動するラッパー |
 | `.local/bin/claude-gh` | 両方 | GitHub の資格情報を渡して Claude Code を起動するラッパー |
+| `.codex/AGENTS.md` | 両方 | Codex 全体への指示（役割分担、レビューの進め方、認証情報・承認ルール） |
 | `.codex/aws.config.toml` | 両方 | Codex の AWS セッション用プロファイル（`AWS_*` だけ渡す、通信先の制限） |
 | `.codex/gh.config.toml` | 両方 | Codex の GitHub セッション用プロファイル（`GH_TOKEN` だけ渡す、通信先の制限） |
 | `.local/bin/codex-aws` | 両方 | AWS の資格情報を渡して Codex を起動するラッパー |
@@ -158,7 +159,7 @@ macOS の `.zshrc` では `alias claude='claude-safe'` を設定しているの�
 
 Claude Code と同じく、AWS と GitHub の資格情報はラッパーで起動したセッションだけに渡す。
 
-`symbolic-link.sh` が `.codex/*.config.toml` を `~/.codex/` へ、`.local/bin/codex-*` を `~/.local/bin/` へリンクする。
+`symbolic-link.sh` が `.codex/*.config.toml` と `.codex/AGENTS.md` を `~/.codex/` へ、`.local/bin/codex-*` を `~/.local/bin/` へリンクする。
 `~/.codex` 本体は Claude Code から読めないが、リポジトリの `.codex/` は読める。
 `settings.json` の禁止規則を `//Users/*/.codex/**` にして、ホーム直下の `~/.codex` だけを対象にしている。
 `~/.codex/config.toml` は Codex が自動で書き換えるため、このリポジトリでは管理しない。
