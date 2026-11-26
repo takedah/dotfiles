@@ -147,6 +147,8 @@ macOS の `.zshrc` では `alias claude='claude-safe'` を設定しているの�
   例: `claude-aws prod -- --resume`
 - `claude-gh` は既定で、`gh` にログイン済みの OAuth トークンを使う。このトークンは権限が広いことがある。
   権限を絞りたいときは、`--prompt-pat` で fine-grained PAT を入力する。
+- `GH_TOKEN` は mask されているので、Claude は `gh` で GitHub の API を使えるが、`git push` のように認証の要る git の操作はできない。git の操作はユーザーが自分のターミナルで行い、API の操作だけを Claude に任せる。
+- `gh` は `~/.config/gh` を読めないと起動に失敗する。ラッパーは `GH_CONFIG_DIR` を存在しないフォルダに向け、`gh` が `GH_TOKEN` だけで動くようにしている。
 - ラッパーは `--append-system-prompt` で起動方法を Claude に伝える。`CLAUDE.md` はそれを見て、認証情報が必要な作業を止めるかを判断する。
   `--system-prompt-snapshot off` を付けているので、別のラッパーで resume しても、いま起動したラッパーの内容が使われる。
 
