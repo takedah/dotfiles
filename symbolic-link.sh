@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-mkdir -p ~/.config/nvim ~/.config/mise ~/.claude ~/.codex ~/.gemini/antigravity-cli ~/.local/bin
+mkdir -p ~/.config/nvim ~/.config/mise ~/.claude ~/.codex ~/.gemini/antigravity-cli ~/.gemini/config ~/.local/bin
 ln -sf ~/dotfiles/.bashrc ~/.bashrc
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 ln -sf ~/dotfiles/.profile ~/.profile
@@ -28,4 +28,5 @@ ln -sf ~/dotfiles/.codex/gh.config.toml ~/.codex/gh.config.toml
 ln -sf ~/dotfiles/.local/bin/codex-aws ~/.local/bin/codex-aws
 ln -sf ~/dotfiles/.local/bin/codex-gh ~/.local/bin/codex-gh
 ln -sf ~/dotfiles/.gemini/antigravity-cli/managed-settings.json ~/.gemini/antigravity-cli/managed-settings.json
+ln -sf ~/dotfiles/.gemini/config/mcp_config.json ~/.gemini/config/mcp_config.json
 ln -sf ~/dotfiles/.local/bin/agy-safe ~/.local/bin/agy-safe
