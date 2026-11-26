@@ -136,29 +136,29 @@ macOS の `.zshrc` では `alias claude='claude-safe'` を設定しているの�
 ### 認証情報の扱い
 
 - 認証情報は Claude Code の外側で取得し、起動したプロセスの環境変数としてだけ渡す。ファイルには書かない。
-- ラッパーは、起動前に既存の AWS / GitHub の認証関連の環境変数を削除する。
+- ラッパーは起動前に既存の AWS / GitHub の認証関連の環境変数を削除する。
 - `settings-aws.json` と `settings-gh.json` は `--settings` で読み込む。Claude から認証情報の値を直接読めないよう、`mask` を指定している。
   ただし、認証情報は `claude` プロセスの環境変数には存在する。
 - 通常のセッションでは、sandbox 内のコマンドを確認なしで実行する（`autoAllowBashIfSandboxed`）。
   AWS / GitHub のセッションでは、`settings-aws.json` / `settings-gh.json` で確認ありに戻している。
 - 通信先は sandbox の `allowedDomains` で制限している。AWS は `*.amazonaws.com` と `*.api.aws`、GitHub は `github.com` と `api.github.com` だけ。
-- AWS の資格情報には期限がある。期限が切れたら、セッションを起動し直す。SSO のプロファイルは、先に `aws sso login --profile <profile>` を実行する。
-- `claude-aws` の最初の引数は、必ずプロファイル名として扱われる。Claude へ渡す引数は `--` の後に書く。
+- AWS の資格情報には期限がある。期限が切れたら、セッションを起動し直す。SSO のプロファイルでは、先に `aws sso login --profile <profile>` を実行する。
+- `claude-aws` の最初の引数は必ずプロファイル名として扱われる。Claude へ渡す引数は `--` の後に書く。
   例: `claude-aws prod -- --resume`
-- `claude-gh` の既定は、`gh` にログイン済みの OAuth トークンを使う。このトークンは権限が広いことがある。
+- `claude-gh` は既定で、`gh` にログイン済みの OAuth トークンを使う。このトークンは権限が広いことがある。
   権限を絞りたいときは、`--prompt-pat` で fine-grained PAT を入力する。
 - ラッパーは `--append-system-prompt` で起動方法を Claude に伝える。`CLAUDE.md` はそれを見て、認証情報が必要な作業を止めるかを判断する。
   `--system-prompt-snapshot off` を付けているので、別のラッパーで resume しても、いま起動したラッパーの内容が使われる。
 
 ## Codex
 
-Claude Code と同じく、AWS と GitHub の資格情報は、ラッパーで起動したセッションだけに渡す。
+Claude Code と同じく、AWS と GitHub の資格情報はラッパーで起動したセッションだけに渡す。
 
 `symbolic-link.sh` が `.codex/*.config.toml` を `~/.codex/` へ、`.local/bin/codex-*` を `~/.local/bin/` へリンクする。
 `~/.codex` 本体は Claude Code から読めないが、リポジトリの `.codex/` は読める。
 `settings.json` の禁止規則を `//Users/*/.codex/**` にして、ホーム直下の `~/.codex` だけを対象にしている。
 `~/.codex/config.toml` は Codex が自動で書き換えるため、このリポジトリでは管理しない。
-プロファイルは、`config.toml` で定義した権限プロファイル `secure` を `extends` で引き継ぐ。
+プロファイルは `config.toml` で定義した権限プロファイル `secure` を `extends` で引き継ぐ。
 
 ### 起動方法
 
@@ -174,7 +174,7 @@ Claude Code と同じく、AWS と GitHub の資格情報は、ラッパーで�
   権限を絞った短命な資格情報を使う。
 - `config.toml` の `approval_policy = "on-request"` で、sandbox 内のコマンドは確認なしで実行する。
   AWS / GitHub のプロファイルも同じ設定を引き継ぐ（全コマンドを確認する `untrusted` は廃止された）。
-- 子プロセスには、`shell_environment_policy.filters` で許可した変数だけを渡す。
+- 子プロセスには `shell_environment_policy.filters` で許可した変数だけを渡す。
 - 通信先の制限は `features.network_proxy`（experimental）で行う。プロキシは TLS を終端して検査する。
 
 ### 動作確認
@@ -199,11 +199,12 @@ $ cd ~/dotfiles && git checkout -- .bash_profile .bashrc .profile .zprofile .zsh
 $ agy-safe   # 初回はブラウザでログイン。トークンは OS のキーチェーンに保存される
 ```
 
-インストーラは最後に `agy install` を実行し、シェルの設定ファイルを書き換える。
-`install.sh` が受け付けるオプションは `--dir` だけなので、この書き換えは止められない。
+インストーラは最後に `agy install` を実行し、シェルの設定ファイルを次のように書き換える。
 
-- `.zshrc` の `alias agy='agy-safe'` を削除する。残すと `agy` がラッパーを通らずに起動する。
+- `.zshrc` の `alias agy='agy-safe'` を削除する。削除されたままだと、`agy` がラッパーを通らずに起動する。
 - 各ファイルの末尾に、ユーザー名を含む絶対パスで `~/.local/bin` を PATH に足す。
+
+`install.sh` が受け付けるオプションは `--dir` だけなので、この書き換えは止められない。
 
 `.zshrc` などはこのリポジトリへのリンクなので、変更はリポジトリに出る。導入後に `git checkout` で戻す。
 リンクが通常のファイルに置き換わっていたら、`symbolic-link.sh` を実行し直す。
@@ -215,7 +216,7 @@ $ agy-safe   # 初回はブラウザでログイン。トークンは OS のキ�
 シンボリックリンクにすると通常のファイルに置き換わってしまうため、リンクしない。
 代わりに `agy-safe` が起動のたびに、`managed-settings.json` を jq で `settings.json` へマージする。
 
-- `managed-settings.json` に書いたキーは、毎回この値で上書きする。
+- `managed-settings.json` に書いたキーは毎回この値で上書きする。
 - `permissions.deny` は、`managed-settings.json` の内容で置き換える。CLI から足した `deny` は次の起動で消える。
 - `permissions.allow` / `ask` は、既存のルールに足し合わせる（重複は除く）。CLI で「常に許可」したルールも残る。
 - それ以外のキー（`/settings` で変えた配色など）は残る。
@@ -229,7 +230,7 @@ $ agy-safe   # 初回はブラウザでログイン。トークンは OS のキ�
 | `agy-safe` | 通常のセッション | 渡さない（AWS / GitHub / `GOOGLE_APPLICATION_CREDENTIALS` を削除して `agy --sandbox` で起動） |
 
 macOS の `.zshrc` では `alias agy='agy-safe'` を設定している。
-`agy update` などのサブコマンドは、ラッパーを通さず `command agy update` で実行する。
+`agy update` などのサブコマンドはラッパーを通さず `command agy update` で実行する。
 
 ### Claude Code / Codex との違い
 
