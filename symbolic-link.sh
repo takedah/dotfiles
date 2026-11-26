@@ -28,5 +28,6 @@ ln -sf ~/dotfiles/.codex/gh.config.toml ~/.codex/gh.config.toml
 ln -sf ~/dotfiles/.local/bin/codex-aws ~/.local/bin/codex-aws
 ln -sf ~/dotfiles/.local/bin/codex-gh ~/.local/bin/codex-gh
 ln -sf ~/dotfiles/.gemini/antigravity-cli/managed-settings.json ~/.gemini/antigravity-cli/managed-settings.json
+ln -sf ~/dotfiles/.gemini/config/AGENTS.md ~/.gemini/config/AGENTS.md
 ln -sf ~/dotfiles/.gemini/config/mcp_config.json ~/.gemini/config/mcp_config.json
 ln -sf ~/dotfiles/.local/bin/agy-safe ~/.local/bin/agy-safe

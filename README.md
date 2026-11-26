@@ -47,6 +47,7 @@ Ubuntu 側は [takedah/ubuntu_playbooks](https://github.com/takedah/ubuntu_playb
 | `.local/bin/codex-aws` | 両方 | AWS の資格情報を渡して Codex を起動するラッパー |
 | `.local/bin/codex-gh` | 両方 | GitHub の資格情報を渡して Codex を起動するラッパー |
 | `.gemini/antigravity-cli/managed-settings.json` | 両方 | Antigravity CLI に強制する設定（sandbox、読み取り拒否） |
+| `.gemini/config/AGENTS.md` | 両方 | Antigravity 全体への指示（役割分担、`handoff.md` での引き継ぎ、承認ルール） |
 | `.gemini/config/mcp_config.json` | 両方 | Antigravity の MCP サーバー設定（AWS Knowledge MCP Server） |
 | `.local/bin/agy-safe` | 両方 | 上の設定をマージし、認証情報なし・sandbox ありで Antigravity CLI を起動するラッパー |
 
@@ -191,7 +192,7 @@ $ codex sandbox -p aws -- curl -sS -o /dev/null -w '%{http_code}\n' https://exam
 
 Google Antigravity は CLI（`agy`）だけを対象にする。IDE とアプリは設定を UI でしか持たないので、このリポジトリでは管理しない。
 
-`symbolic-link.sh` が `.gemini/antigravity-cli/managed-settings.json` を `~/.gemini/antigravity-cli/` へ、`.gemini/config/mcp_config.json` を `~/.gemini/config/` へ、`.local/bin/agy-safe` を `~/.local/bin/` へリンクする。
+`symbolic-link.sh` が `.gemini/antigravity-cli/managed-settings.json` を `~/.gemini/antigravity-cli/` へ、`.gemini/config/AGENTS.md` と `.gemini/config/mcp_config.json` を `~/.gemini/config/` へ、`.local/bin/agy-safe` を `~/.local/bin/` へリンクする。
 `~/.gemini` は Claude Code から読めないようにしている（`.codex` と同じく、リポジトリの `.gemini/` は読める）。
 
 ### 導入
