@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Normal Antigravity CLI session: do not inherit AWS/GitHub credentials.
+unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_SECURITY_TOKEN 2>/dev/null || true
+unset AWS_PROFILE AWS_DEFAULT_PROFILE AWS_SHARED_CREDENTIALS_FILE AWS_CONFIG_FILE 2>/dev/null || true
+unset AWS_WEB_IDENTITY_TOKEN_FILE AWS_ROLE_ARN AWS_ROLE_SESSION_NAME 2>/dev/null || true
+unset AWS_CONTAINER_CREDENTIALS_RELATIVE_URI AWS_CONTAINER_CREDENTIALS_FULL_URI 2>/dev/null || true
+unset AWS_CONTAINER_AUTHORIZATION_TOKEN AWS_CONTAINER_AUTHORIZATION_TOKEN_FILE 2>/dev/null || true
+unset GH_TOKEN GITHUB_TOKEN GH_ENTERPRISE_TOKEN GITHUB_ENTERPRISE_TOKEN 2>/dev/null || true
+
+command -v jq >/dev/null 2>&1 || {
+  echo "error: jq not found in PATH" >&2
+  exit 127
+}
+AGY_BIN="$(command -v agy || true)"
+if [[ -z "$AGY_BIN" ]]; then
+  echo "error: agy command not found in PATH" >&2
+  exit 127
+fi
+
+SETTINGS_DIR="$HOME/.gemini/antigravity-cli"
+SETTINGS_FILE="$SETTINGS_DIR/settings.json"
+MANAGED_FILE="$SETTINGS_DIR/managed-settings.json"
+if [[ ! -r "$MANAGED_FILE" ]]; then
+  echo "error: $MANAGED_FILE not found or not readable" >&2
+  exit 1
+fi
+
+# The CLI normalizes settings.json at startup by replacing the file, so it
+# cannot be a symlink into dotfiles. Merge the managed keys on every launch
+# instead: managed values win, and permission rules are added to existing ones.
+mkdir -p "$SETTINGS_DIR"
+[[ -s "$SETTINGS_FILE" ]] || echo '{}' >"$SETTINGS_FILE"
+TMP_FILE="$(mktemp "$SETTINGS_FILE.XXXXXX")"
+trap 'rm -f "$TMP_FILE"' EXIT
+if ! jq -s --arg home "$HOME" '
+  (.[1] | walk(if type == "string" then sub("\\(~/"; "(" + $home + "/") else . end)) as $m
+  | (.[0] * ($m | del(.permissions)))
+  | .permissions = reduce ("allow", "ask", "deny") as $k (.permissions // {};
+      if $m.permissions[$k] then .[$k] = ((.[$k] // []) + $m.permissions[$k] | unique) else . end)
+' "$SETTINGS_FILE" "$MANAGED_FILE" >"$TMP_FILE"; then
+  echo "error: could not merge $MANAGED_FILE into $SETTINGS_FILE" >&2
+  exit 1
+fi
+chmod 600 "$TMP_FILE"
+mv "$TMP_FILE" "$SETTINGS_FILE"
+trap - EXIT
+
+exec "$AGY_BIN" --sandbox "$@"

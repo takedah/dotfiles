@@ -46,6 +46,8 @@ Ubuntu 側は [takedah/ubuntu_playbooks](https://github.com/takedah/ubuntu_playb
 | `.codex/gh.config.toml` | 両方 | Codex の GitHub セッション用プロファイル（`GH_TOKEN` だけ渡す、通信先の制限） |
 | `.local/bin/codex-aws` | 両方 | AWS の資格情報を渡して Codex を起動するラッパー |
 | `.local/bin/codex-gh` | 両方 | GitHub の資格情報を渡して Codex を起動するラッパー |
+| `.gemini/antigravity-cli/managed-settings.json` | 両方 | Antigravity CLI に強制する設定（sandbox、読み取り拒否） |
+| `.local/bin/agy-safe` | 両方 | 上の設定をマージし、認証情報なし・sandbox ありで Antigravity CLI を起動するラッパー |
 
 `symbolic-link.sh` は macOS 用の `.zshrc` / `.zprofile` も含めて全部リンクする。
 Ubuntu では zsh を使わない限り読まれないので実害はない。
@@ -175,6 +177,60 @@ Claude Code と同じく、AWS と GitHub の資格情報は、ラッパーで�
 ```console
 $ AWS_ACCESS_KEY_ID=dummy FOO_TOKEN=dummy codex sandbox -p aws -- env | cut -d= -f1 | sort
 $ codex sandbox -p aws -- curl -sS -o /dev/null -w '%{http_code}\n' https://example.com/   # 403 で拒否される
+```
+
+## Antigravity
+
+Google Antigravity は CLI（`agy`）だけを対象にする。IDE とアプリは設定を UI でしか持たないので、このリポジトリでは管理しない。
+
+`symbolic-link.sh` が `.gemini/antigravity-cli/managed-settings.json` を `~/.gemini/antigravity-cli/` へ、`.local/bin/agy-safe` を `~/.local/bin/` へリンクする。
+`~/.gemini` は Claude Code から読めないようにしている（`.codex` と同じく、リポジトリの `.gemini/` は読める）。
+
+### 導入
+
+```console
+$ curl -fsSL https://antigravity.google/cli/install.sh | bash -s -- --skip-aliases --skip-path
+$ agy-safe   # 初回はブラウザでログイン。トークンは OS のキーチェーンに保存される
+```
+
+インストーラは既定でシェルの設定ファイル（エイリアスと PATH）を書き換える。
+`.zshrc` などはこのリポジトリへのリンクなので、`--skip-aliases --skip-path` で書き換えを止める。
+`agy` は `~/.local/bin/agy` に入り、PATH は `.zprofile` / `.profile` で通っている。
+
+### 設定の管理
+
+`~/.gemini/antigravity-cli/settings.json` は CLI が起動時に自分の形式で書き直し、ファイルごと置き換える。
+シンボリックリンクにすると通常のファイルに置き換わってしまうため、リンクしない。
+代わりに `agy-safe` が起動のたびに、`managed-settings.json` を jq で `settings.json` へマージする。
+
+- `managed-settings.json` に書いたキーは、毎回この値で上書きする。
+- `permissions` の `allow` / `ask` / `deny` は、既存のルールに足し合わせる（重複は除く）。
+- それ以外のキー（`/settings` で変えた配色など）は残る。
+- ルール中の `~/` は `$HOME` に展開する。
+
+### 起動方法
+
+| コマンド | 用途 | 資格情報 |
+|---|---|---|
+| `agy-safe` | 通常のセッション | 渡さない（AWS / GitHub の環境変数を削除して `agy --sandbox` で起動） |
+
+macOS の `.zshrc` では `alias agy='agy-safe'` を設定している。
+
+### Claude Code / Codex との違い
+
+- 設定ファイルを切り替えるフラグ（`--settings` / `--profile`）がないため、`agy-aws` / `agy-gh` は用意していない。
+  共有の `settings.json` を書き換えると、同時に起動したセッションと衝突する。
+- 環境変数の mask やフィルタの機能がない。ラッパーで削除した変数以外は、そのまま子プロセスに渡る。
+- sandbox は既定で通信を許さない。許可するドメインは `permissions.allow` に `read_url(<domain>)` で足す。
+- 既定でブロックされるのは `~/.ssh` と `.env` だけなので、`~/.aws` などは `permissions.deny` の `read_file(...)` で拒否している。
+- macOS の sandbox プロファイルは `(allow default)` から始まる拒否リスト型だという報告がある。Claude Code の sandbox ほど強い隔離だとは考えない。
+
+### 動作確認
+
+```console
+$ agy-safe -p 'cat ~/.aws/config を実行して結果を表示して'   # 拒否される
+$ agy-safe -p 'curl -sS https://example.com/ を実行して結果を表示して'   # 通信できない
+$ jq . ~/.gemini/antigravity-cli/settings.json
 ```
 
 ## Key bindings
