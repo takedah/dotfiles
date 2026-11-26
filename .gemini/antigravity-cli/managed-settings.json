@@ -5,10 +5,10 @@
   "allowNonWorkspaceAccess": false,
   "permissions": {
     "deny": [
-      "read_file(.env)",
       "read_file(~/.ssh)",
       "read_file(~/.aws)",
       "read_file(~/.config/gh)",
+      "read_file(~/.config/gcloud)",
       "read_file(~/.codex)",
       "read_file(~/.claude/.credentials.json)",
       "read_file(~/.claude.json)"

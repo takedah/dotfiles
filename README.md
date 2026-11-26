@@ -66,6 +66,7 @@ Ubuntu では zsh を使わない限り読まれないので実害はない。
 | `jedi-language-server` | coc-jedi が起動する Python LSP |
 | `black` `isort` `flake8` | ale の fixer と coc-diagnostic の formatter |
 | `fzf` `rg` `bat` `fd` | fzf-preview.vim のファイル検索とプレビュー |
+| `jq` | 1.6 以降。`agy-safe` が Antigravity CLI の設定をマージする |
 
 Ubuntu では `bat` が `batcat`、`fd` が `fdfind` という名前で入るため、
 `~/.local/bin` にリンクを張る必要がある（Playbook が実施済み）。
@@ -138,6 +139,8 @@ macOS の `.zshrc` では `alias claude='claude-safe'` を設定しているの�
 - ラッパーは、起動前に既存の AWS / GitHub の認証関連の環境変数を削除する。
 - `settings-aws.json` と `settings-gh.json` は `--settings` で読み込む。Claude から認証情報の値を直接読めないよう、`mask` を指定している。
   ただし、認証情報は `claude` プロセスの環境変数には存在する。
+- 通常のセッションでは、sandbox 内のコマンドを確認なしで実行する（`autoAllowBashIfSandboxed`）。
+  AWS / GitHub のセッションでは、`settings-aws.json` / `settings-gh.json` で確認ありに戻している。
 - 通信先は sandbox の `allowedDomains` で制限している。AWS は `*.amazonaws.com` と `*.api.aws`、GitHub は `github.com` と `api.github.com` だけ。
 - AWS の資格情報には期限がある。期限が切れたら、セッションを起動し直す。SSO のプロファイルは、先に `aws sso login --profile <profile>` を実行する。
 - `claude-aws` の最初の引数は、必ずプロファイル名として扱われる。Claude へ渡す引数は `--` の後に書く。
@@ -169,6 +172,8 @@ Claude Code と同じく、AWS と GitHub の資格情報は、ラッパーで�
 
 - Codex には `mask` に当たる機能がない。渡した資格情報は、エージェントが `env` などで読める。
   権限を絞った短命な資格情報を使う。
+- `config.toml` の `approval_policy = "on-request"` で、sandbox 内のコマンドは確認なしで実行する。
+  AWS / GitHub のプロファイルも同じ設定を引き継ぐ（全コマンドを確認する `untrusted` は廃止された）。
 - 子プロセスには、`shell_environment_policy.filters` で許可した変数だけを渡す。
 - 通信先の制限は `features.network_proxy`（experimental）で行う。プロキシは TLS を終端して検査する。
 
@@ -211,17 +216,20 @@ $ agy-safe   # 初回はブラウザでログイン。トークンは OS のキ�
 代わりに `agy-safe` が起動のたびに、`managed-settings.json` を jq で `settings.json` へマージする。
 
 - `managed-settings.json` に書いたキーは、毎回この値で上書きする。
-- `permissions` の `allow` / `ask` / `deny` は、既存のルールに足し合わせる（重複は除く）。
+- `permissions.deny` は、`managed-settings.json` の内容で置き換える。CLI から足した `deny` は次の起動で消える。
+- `permissions.allow` / `ask` は、既存のルールに足し合わせる（重複は除く）。CLI で「常に許可」したルールも残る。
 - それ以外のキー（`/settings` で変えた配色など）は残る。
 - ルール中の `~/` は `$HOME` に展開する。
+  sandbox は相対パスの `read_file(...)` を受け付けず、全コマンドが失敗するので、相対パスは書かない。
 
 ### 起動方法
 
 | コマンド | 用途 | 資格情報 |
 |---|---|---|
-| `agy-safe` | 通常のセッション | 渡さない（AWS / GitHub の環境変数を削除して `agy --sandbox` で起動） |
+| `agy-safe` | 通常のセッション | 渡さない（AWS / GitHub / `GOOGLE_APPLICATION_CREDENTIALS` を削除して `agy --sandbox` で起動） |
 
 macOS の `.zshrc` では `alias agy='agy-safe'` を設定している。
+`agy update` などのサブコマンドは、ラッパーを通さず `command agy update` で実行する。
 
 ### Claude Code / Codex との違い
 
