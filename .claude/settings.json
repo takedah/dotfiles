@@ -52,7 +52,8 @@
       ],
       "allowRead": [
         "~/.agents/skills",
-        "~/.local/share/mise"
+        "~/.local/share/mise",
+        "~/dotfiles/.config/git/ignore"
       ]
     }
   },

@@ -31,7 +31,7 @@ Ubuntu 側は [takedah/ubuntu_playbooks](https://github.com/takedah/ubuntu_playb
 | `.config/nvim/init.vim` | 両方 | Neovim 本体設定、プラグイン、キーマップ |
 | `.config/nvim/coc-settings.json` | 両方 | coc.nvim の LSP / フォーマッタ設定 |
 | `.config/mise/config.toml` | 両方 | mise のグローバルなツール（Python / Node.js / uv と Python 製 CLI） |
-| `.config/git/ignore` | 両方 | Git のグローバルな除外設定（ルート直下の `handoff.md` / `.yomiyasu/` など） |
+| `.config/git/ignore` | 両方 | Git のグローバルな除外設定（ルート直下の `handoff.md` / `.yomiyasu/` など）。リンクせず `core.excludesfile` で指す |
 | `.default-python-packages` | 両方 | Python を入れたときに自動で入るパッケージ（pynvim） |
 | `.default-npm-packages` | 両方 | Node.js を入れたときに自動で入るパッケージ |
 | `.editorconfig` | 両方 | 言語ごとのインデント幅 |
@@ -57,8 +57,10 @@ Ubuntu 側は [takedah/ubuntu_playbooks](https://github.com/takedah/ubuntu_playb
 `symbolic-link.sh` は macOS 用の `.zshrc` / `.zprofile` も含めて全部リンクする。
 Ubuntu では zsh を使わない限り読まれないので実害はない。
 
-`symbolic-link.sh` は `~/.config/git/ignore` もリンクで置き換えるため、既存のファイルに独自の設定があれば、
-先にリポジトリの `.config/git/ignore` へ取り込んでおく。
+Claude Code の sandbox は、リンクになった `~/.config/git/ignore` を読めないため、`.config/git/ignore` はリンクしない。
+代わりに `symbolic-link.sh` が `git config --global core.excludesfile` でこのファイルを直接指す。
+sandbox からも読めるよう、`.claude/settings.json` の `allowRead` にこのファイルを入れている。
+`core.excludesfile` を設定すると `~/.config/git/ignore` は読まれなくなるので、独自の設定があれば先にリポジトリの `.config/git/ignore` へ取り込んでおく。
 
 ## Requirements
 
@@ -245,16 +247,18 @@ $ agy-safe   # 初回はブラウザでログイン。トークンは OS のキ�
 リンクの後に実行する場合は、先に `git -C ~/dotfiles status` で作業ツリーがクリーンなことを確認し、
 インストーラの書き換えを次の「リンク済みの環境」の手順で戻す。
 
-**リンク済みの環境**: `install.sh` の実行後に `git diff` でインストーラが書き換えた箇所を確認する。
+**リンク済みの環境**: `install.sh` を実行する前に未コミットの変更を控え、実行後に `git diff` でインストーラが書き換えた箇所を確認する。
 
 ```console
+$ cd ~/dotfiles && git status && git diff > /tmp/dotfiles-before-agy.diff
 $ curl -fsSL https://antigravity.google/cli/install.sh | bash
-$ cd ~/dotfiles && git status && git diff
+$ git diff
 ```
 
 - 実行前に未コミットの変更がなかったなら、`git checkout -- <書き換わったファイル>` でまとめて戻す。
-- 未コミットの編集があったなら、`git checkout -p -- <ファイル>` か手で編集して、
-  インストーラ由来の差分（`alias agy` の削除と PATH の追記）だけを戻す。
+- 未コミットの編集があったなら、控えた差分と比べて、インストーラ由来の行（`alias agy` の削除と PATH の追記）だけを戻す。
+  `git checkout -p -- <ファイル>` で戻してよいのは、インストーラ由来の行だけのハンクに限る。
+  インストーラ由来の行が既存の編集と同じハンクに入っていたら、そのハンクは手で編集して、インストーラ由来の行だけを戻す。
 
 リンクが通常のファイルに置き換わっていたら、`symbolic-link.sh` を実行し直す。
 `agy` は `~/.local/bin/agy` に入り、PATH は `.zprofile` / `.profile` で通っている。
