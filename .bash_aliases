@@ -14,3 +14,5 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 alias ll='ls -al'
 alias vi='nvim'
 alias sudo='sudo -E '
+alias claude='claude-safe'
+alias agy='agy-safe'

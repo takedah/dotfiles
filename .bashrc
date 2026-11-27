@@ -38,3 +38,9 @@ if ! shopt -oq posix; then
 fi
 # mise
 command -v mise > /dev/null && eval "$(mise activate bash)"
+
+# Alias definitions
+# .bash_aliases は .profile からも読み込むが、.profile はログインシェルでしか読まれないため、非ログインの対話シェル用にここでも読み込む
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi

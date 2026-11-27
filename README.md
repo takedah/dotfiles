@@ -19,9 +19,9 @@ Ubuntu 側は [takedah/ubuntu_playbooks](https://github.com/takedah/ubuntu_playb
 | ファイル | 対象 | 内容 |
 |---|---|---|
 | `.profile` | Ubuntu | PATH（mise shims / `~/.local/bin`）、PS1、XDG 変数 |
-| `.bashrc` | Ubuntu | 対話シェル設定、`mise activate bash` |
+| `.bashrc` | Ubuntu | 対話シェル設定、`mise activate bash`、`.bash_aliases` の読み込み |
 | `.bash_profile` | Ubuntu | `.profile` と `.bashrc` の読み込み |
-| `.bash_aliases` | Ubuntu | ls の色付け、`ll` / `vi` / `sudo` エイリアス |
+| `.bash_aliases` | Ubuntu | ls の色付け、`ll` / `vi` / `sudo` / `claude` / `agy` エイリアス |
 | `.zprofile` | macOS | Homebrew、PATH（mise shims / `~/.local/bin`） |
 | `.zshrc` | macOS | エイリアス、PS1、fzf、`mise activate zsh` |
 | `.git-prompt.sh` | 両方 | git ブランチ名を PS1 に出す（upstream の git 同梱スクリプト） |
@@ -31,6 +31,7 @@ Ubuntu 側は [takedah/ubuntu_playbooks](https://github.com/takedah/ubuntu_playb
 | `.config/nvim/init.vim` | 両方 | Neovim 本体設定、プラグイン、キーマップ |
 | `.config/nvim/coc-settings.json` | 両方 | coc.nvim の LSP / フォーマッタ設定 |
 | `.config/mise/config.toml` | 両方 | mise のグローバルなツール（Python / Node.js / uv と Python 製 CLI） |
+| `.config/git/ignore` | 両方 | Git のグローバルな除外設定（ルート直下の `handoff.md` / `.yomiyasu/` など） |
 | `.default-python-packages` | 両方 | Python を入れたときに自動で入るパッケージ（pynvim） |
 | `.default-npm-packages` | 両方 | Node.js を入れたときに自動で入るパッケージ |
 | `.editorconfig` | 両方 | 言語ごとのインデント幅 |
@@ -45,6 +46,7 @@ Ubuntu 側は [takedah/ubuntu_playbooks](https://github.com/takedah/ubuntu_playb
 | `.codex/AGENTS.md` | 両方 | Codex 全体への指示（役割分担、レビューの進め方、認証情報・承認ルール） |
 | `.codex/aws.config.toml` | 両方 | Codex の AWS セッション用プロファイル（`AWS_*` だけ渡す、通信先の制限） |
 | `.codex/gh.config.toml` | 両方 | Codex の GitHub セッション用プロファイル（`GH_TOKEN` だけ渡す、通信先の制限） |
+| `.codex/config.toml.example` | 両方 | `~/.codex/config.toml` のテンプレート（権限プロファイル `secure`、環境変数、MCP）。リンクしない |
 | `.local/bin/codex-aws` | 両方 | AWS の資格情報を渡して Codex を起動するラッパー |
 | `.local/bin/codex-gh` | 両方 | GitHub の資格情報を渡して Codex を起動するラッパー |
 | `.gemini/antigravity-cli/managed-settings.json` | 両方 | Antigravity CLI に強制する設定（sandbox、読み取り拒否） |
@@ -54,6 +56,9 @@ Ubuntu 側は [takedah/ubuntu_playbooks](https://github.com/takedah/ubuntu_playb
 
 `symbolic-link.sh` は macOS 用の `.zshrc` / `.zprofile` も含めて全部リンクする。
 Ubuntu では zsh を使わない限り読まれないので実害はない。
+
+`symbolic-link.sh` は `~/.config/git/ignore` もリンクで置き換えるため、既存のファイルに独自の設定があれば、
+先にリポジトリの `.config/git/ignore` へ取り込んでおく。
 
 ## Requirements
 
@@ -91,7 +96,7 @@ $ ~/dotfiles/symbolic-link.sh
 依存コマンドを入れる。
 
 ```console
-$ brew install mise tmux neovim fzf ripgrep bat fd
+$ brew install mise tmux neovim fzf ripgrep bat fd jq
 $ mise install
 ```
 
@@ -132,8 +137,9 @@ AWS と GitHub の資格情報は、明示的に環境変数へセットして�
 ラッパーの実体はリポジトリの `.local/bin/` にあり、`~/.local/bin/` からリンクされる。
 ラッパーは本体の `claude` を PATH から探して起動する。
 
-macOS の `.zshrc` では `alias claude='claude-safe'` を設定しているので、
+macOS の `.zshrc` と Ubuntu の `.bash_aliases` では `alias claude='claude-safe'` を設定しているので、
 `claude` と入力すると通常セッションになる。
+Ubuntu では `.bash_aliases` を `.profile`（ログインシェル）と `.bashrc`（非ログインの対話シェル）の両方から読み込む。
 `/opt/homebrew/bin/claude` を直接実行するとラッパーを通らないため、この仕組みの対象外になる。
 
 ### 認証情報の扱い
@@ -162,8 +168,28 @@ Claude Code と同じく、AWS と GitHub の資格情報はラッパーで起�
 `symbolic-link.sh` が `.codex/*.config.toml` と `.codex/AGENTS.md` を `~/.codex/` へ、`.local/bin/codex-*` を `~/.local/bin/` へリンクする。
 `~/.codex` 本体は Claude Code から読めないが、リポジトリの `.codex/` は読める。
 `settings.json` の禁止規則を `//Users/*/.codex/**` にして、ホーム直下の `~/.codex` だけを対象にしている。
-`~/.codex/config.toml` は Codex が自動で書き換えるため、このリポジトリでは管理しない。
+`~/.codex/config.toml` は Codex が自動で書き換えるため、リンクしない。代わりに、リポジトリにはテンプレートの `.codex/config.toml.example` を置く。
 プロファイルは `config.toml` で定義した権限プロファイル `secure` を `extends` で引き継ぐ。
+
+### 導入
+
+`~/.codex/config.toml` がまだない新しい環境では、テンプレートをコピーする。
+
+```console
+$ mkdir -p ~/.codex
+$ cp ~/dotfiles/.codex/config.toml.example ~/.codex/config.toml
+```
+
+`~/.codex/config.toml` がすでにある環境では、上書きしない。`[tui]` や `[projects.*]` などの既存のセクションは残し、
+テンプレートの次の部分を追記・マージする。
+
+- 先頭の `approval_policy` / `default_permissions` / `cli_auth_credentials_store`
+- `[permissions.secure.*]`（ファイルシステム、ワークスペース、ネットワーク）
+- `[shell_environment_policy]`
+- `[mcp_servers.aws-knowledge]`
+
+従来の `sandbox_mode` や `[sandbox_workspace_write]` は `[permissions.*]` のプロファイルと併用できない。
+既存のファイルに残っていれば削除する。
 
 ### 起動方法
 
@@ -198,20 +224,38 @@ Google Antigravity は CLI（`agy`）だけを対象にする。IDE とアプリ
 
 ### 導入
 
-```console
-$ curl -fsSL https://antigravity.google/cli/install.sh | bash
-$ cd ~/dotfiles && git checkout -- .bash_profile .bashrc .profile .zprofile .zshrc
-$ agy-safe   # 初回はブラウザでログイン。トークンは OS のキーチェーンに保存される
-```
-
 インストーラは最後に `agy install` を実行し、シェルの設定ファイルを次のように書き換える。
 
-- `.zshrc` の `alias agy='agy-safe'` を削除する。削除されたままだと、`agy` がラッパーを通らずに起動する。
+- `.zshrc` などの `alias agy='agy-safe'` を削除する。削除されたままだと、`agy` がラッパーを通らずに起動する。
 - 各ファイルの末尾に、ユーザー名を含む絶対パスで `~/.local/bin` を PATH に足す。
 
 `install.sh` が受け付けるオプションは `--dir` だけなので、この書き換えは止められない。
+`.zshrc` などがこのリポジトリへのリンクになっていると、変更はリポジトリに出る。
+未コミットの編集を消さないよう、状況に応じて次のどちらかで導入する。
 
-`.zshrc` などはこのリポジトリへのリンクなので、変更はリポジトリに出る。導入後に `git checkout` で戻す。
+**新しい端末**: `symbolic-link.sh` を実行する前に `install.sh` を実行する。
+インストーラが書き換えるのはホームにある元のファイルで、そのファイルはあとでリンクに置き換わるので、書き換えはリポジトリに出ない。
+
+```console
+$ curl -fsSL https://antigravity.google/cli/install.sh | bash
+$ ~/dotfiles/symbolic-link.sh
+$ agy-safe   # 初回はブラウザでログイン。トークンは OS のキーチェーンに保存される
+```
+
+リンクの後に実行する場合は、先に `git -C ~/dotfiles status` で作業ツリーがクリーンなことを確認し、
+インストーラの書き換えを次の「リンク済みの環境」の手順で戻す。
+
+**リンク済みの環境**: `install.sh` の実行後に `git diff` でインストーラが書き換えた箇所を確認する。
+
+```console
+$ curl -fsSL https://antigravity.google/cli/install.sh | bash
+$ cd ~/dotfiles && git status && git diff
+```
+
+- 実行前に未コミットの変更がなかったなら、`git checkout -- <書き換わったファイル>` でまとめて戻す。
+- 未コミットの編集があったなら、`git checkout -p -- <ファイル>` か手で編集して、
+  インストーラ由来の差分（`alias agy` の削除と PATH の追記）だけを戻す。
+
 リンクが通常のファイルに置き換わっていたら、`symbolic-link.sh` を実行し直す。
 `agy` は `~/.local/bin/agy` に入り、PATH は `.zprofile` / `.profile` で通っている。
 
@@ -234,7 +278,7 @@ $ agy-safe   # 初回はブラウザでログイン。トークンは OS のキ�
 |---|---|---|
 | `agy-safe` | 通常のセッション | 渡さない（AWS / GitHub / `GOOGLE_APPLICATION_CREDENTIALS` を削除して `agy --sandbox` で起動） |
 
-macOS の `.zshrc` では `alias agy='agy-safe'` を設定している。
+macOS の `.zshrc` と Ubuntu の `.bash_aliases` では `alias agy='agy-safe'` を設定している。
 `agy update` などのサブコマンドはラッパーを通さず `command agy update` で実行する。
 
 ### Claude Code / Codex との違い

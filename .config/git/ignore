@@ -1,0 +1,9 @@
+# Claude Code
+**/.claude/settings.local.json
+**/.claude/.cc-writes/
+
+# AI 間の引き継ぎファイル（リポジトリルート直下のみ）
+/handoff.md
+
+# yomiyasu の検査記録（リポジトリルート直下のみ）
+/.yomiyasu/

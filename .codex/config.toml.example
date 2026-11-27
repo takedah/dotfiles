@@ -1,0 +1,77 @@
+# =====================================
+# Codex CLI Security Configuration
+# =====================================
+# ~/.codex/config.toml のテンプレート。
+# Codex が自動で書き換えるため、シンボリックリンクにはしない。
+# 導入手順は README.md の「Codex」を参照。
+
+# 操作の承認
+approval_policy = "on-request"
+
+# 権限プロファイル
+default_permissions = "secure"
+
+# キーチェーンを使用しない
+cli_auth_credentials_store = "file"
+
+# =====================================
+# Filesystem Permissions
+# =====================================
+
+[permissions.secure.filesystem]
+
+# 最低限のシステムファイルを読み取り可能にする
+":minimal" = "read"
+
+# SSH
+"~/.ssh" = "deny"
+
+# AWS
+"~/.aws" = "deny"
+
+# Claude Code
+"~/.claude" = "deny"
+"~/.claude.json" = "deny"
+
+# Codex 認証情報
+"~/.codex/auth.json" = "deny"
+
+# GitHub 認証情報
+"~/.config/gh" = "deny"
+
+# =====================================
+# Workspace Protection
+# =====================================
+
+[permissions.secure.filesystem.":workspace_roots"]
+
+# ワークスペース全体への書き込みを許可
+"." = "write"
+
+# 環境変数ファイルを保護
+"**/.env" = "deny"
+"**/.env.*" = "deny"
+
+# =====================================
+# Network
+# =====================================
+
+[permissions.secure.network]
+
+enabled = false
+
+# =====================================
+# Environment Variables
+# =====================================
+
+[shell_environment_policy]
+
+inherit = "core"
+ignore_default_excludes = false
+
+# =====================================
+# MCP Servers
+# =====================================
+
+[mcp_servers.aws-knowledge]
+url = "https://knowledge-mcp.global.api.aws"
