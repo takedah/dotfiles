@@ -12,7 +12,12 @@ ln -sf ~/dotfiles/.flake8 ~/.flake8
 ln -sf ~/dotfiles/.config/nvim/init.vim ~/.config/nvim/init.vim
 ln -sf ~/dotfiles/.config/nvim/coc-settings.json ~/.config/nvim/coc-settings.json
 ln -sf ~/dotfiles/.config/mise/config.toml ~/.config/mise/config.toml
-git config --global core.excludesfile '~/dotfiles/.config/git/ignore'
+excludes="$(git config --global --get core.excludesfile || true)"
+if [ -z "$excludes" ] || [ "$excludes" = '~/dotfiles/.config/git/ignore' ] || [ "$excludes" = "$HOME/dotfiles/.config/git/ignore" ]; then
+  git config --global core.excludesfile '~/dotfiles/.config/git/ignore'
+else
+  echo "core.excludesfile は $excludes に設定済みのため変更しない。ルールを ~/dotfiles/.config/git/ignore へ取り込んでから設定を外し、再実行する。" >&2
+fi
 ln -sf ~/dotfiles/.default-python-packages ~/.default-python-packages
 ln -sf ~/dotfiles/.default-npm-packages ~/.default-npm-packages
 ln -sf ~/dotfiles/.editorconfig ~/.editorconfig

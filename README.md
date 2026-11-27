@@ -61,6 +61,8 @@ Claude Code の sandbox は、リンクになった `~/.config/git/ignore` を�
 代わりに `symbolic-link.sh` が `git config --global core.excludesfile` でこのファイルを直接指す。
 sandbox からも読めるよう、`.claude/settings.json` の `allowRead` にこのファイルを入れている。
 `core.excludesfile` を設定すると `~/.config/git/ignore` は読まれなくなるので、独自の設定があれば先にリポジトリの `.config/git/ignore` へ取り込んでおく。
+`core.excludesfile` に別のファイルがすでに設定されているときは、`symbolic-link.sh` は設定を変えずに警告を出す。
+そのファイルの設定を `.config/git/ignore` へ取り込んでから `git config --global --unset core.excludesfile` で設定を外し、`symbolic-link.sh` を実行し直す。
 
 ## Requirements
 
@@ -250,13 +252,16 @@ $ agy-safe   # 初回はブラウザでログイン。トークンは OS のキ�
 **リンク済みの環境**: `install.sh` を実行する前に未コミットの変更を控え、実行後に `git diff` でインストーラが書き換えた箇所を確認する。
 
 ```console
-$ cd ~/dotfiles && git status && git diff > /tmp/dotfiles-before-agy.diff
-$ curl -fsSL https://antigravity.google/cli/install.sh | bash
+$ cd ~/dotfiles && git status
+$ BEFORE="$(mktemp)" && git diff > "$BEFORE" && curl -fsSL https://antigravity.google/cli/install.sh | bash
 $ git diff
 ```
 
+控えた差分は、`mktemp` が作る一時ファイルに入る。このファイルは自分だけが読み書きできる。`&&` でつないでいるので、差分を保存できたときだけインストーラを実行する。
+戻し終えたら `rm "$BEFORE"` で削除する。
+
 - 実行前に未コミットの変更がなかったなら、`git checkout -- <書き換わったファイル>` でまとめて戻す。
-- 未コミットの編集があったなら、控えた差分と比べて、インストーラ由来の行（`alias agy` の削除と PATH の追記）だけを戻す。
+- 未コミットの編集があったなら、控えた差分（`$BEFORE`）と比べて、インストーラ由来の行（`alias agy` の削除と PATH の追記）だけを戻す。
   `git checkout -p -- <ファイル>` で戻してよいのは、インストーラ由来の行だけのハンクに限る。
   インストーラ由来の行が既存の編集と同じハンクに入っていたら、そのハンクは手で編集して、インストーラ由来の行だけを戻す。
 
