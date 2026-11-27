@@ -252,12 +252,12 @@ $ agy-safe   # 初回はブラウザでログイン。トークンは OS のキ�
 **リンク済みの環境**: `install.sh` を実行する前に未コミットの変更を控え、実行後に `git diff` でインストーラが書き換えた箇所を確認する。
 
 ```console
-$ cd ~/dotfiles && git status
-$ BEFORE="$(mktemp)" && git diff > "$BEFORE" && curl -fsSL https://antigravity.google/cli/install.sh | bash
+$ cd ~/dotfiles && git status && BEFORE="$(mktemp)" && git diff > "$BEFORE" \
+    && curl -fsSL https://antigravity.google/cli/install.sh | bash
 $ git diff
 ```
 
-控えた差分は、`mktemp` が作る一時ファイルに入る。このファイルは自分だけが読み書きできる。`&&` でつないでいるので、差分を保存できたときだけインストーラを実行する。
+控えた差分は、`mktemp` が作る一時ファイルに入る。このファイルは自分だけが読み書きできる。`~/dotfiles` への移動から差分の保存までを `&&` でつないでいるので、dotfiles の差分を保存できたときだけインストーラを実行する。
 戻し終えたら `rm "$BEFORE"` で削除する。
 
 - 実行前に未コミットの変更がなかったなら、`git checkout -- <書き換わったファイル>` でまとめて戻す。
